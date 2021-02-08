@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
+using PixivCS.Utils;
+
 namespace PixivCS
 {
     public class PixivAppAPI : PixivBaseAPI
@@ -34,7 +36,13 @@ namespace PixivCS
             return await base.RequestCall(Method, Url, headers, Query, Body);
         }
 
-        //用户详情
+        /// <summary>
+        /// 用户详情
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Filter"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserDetail> GetUserDetailAsync(string UserID, string Filter = "for_ios",
             bool RequireAuth = true)
         {
@@ -45,10 +53,18 @@ namespace PixivCS
                 ("filter", Filter)
             };
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserDetail.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserDetail>();
         }
 
-        //用户作品
+        /// <summary>
+        /// 用户作品
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="IllustType"></param>
+        /// <param name="Filter"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserIllusts> GetUserIllustsAsync(string UserID, string IllustType = "illust",
             string Filter = "for_ios", string Offset = null, bool RequireAuth = true)
         {
@@ -61,10 +77,19 @@ namespace PixivCS
             if (!string.IsNullOrEmpty(IllustType)) query.Add(("type", IllustType));
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserIllusts.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserIllusts>();
         }
 
-        //用户收藏
+        /// <summary>
+        /// 用户收藏
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Restrict"></param>
+        /// <param name="Filter"></param>
+        /// <param name="MaxBookmarkID"></param>
+        /// <param name="Tag"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserIllusts> GetUserBookmarksIllustAsync(string UserID, string Restrict = "public",
             string Filter = "for_ios", string MaxBookmarkID = null, string Tag = null,
             bool RequireAuth = true)
@@ -79,10 +104,16 @@ namespace PixivCS
             if (!string.IsNullOrEmpty(MaxBookmarkID)) query.Add(("max_bookmark_id", MaxBookmarkID));
             if (!string.IsNullOrEmpty(Tag)) query.Add(("tag", Tag));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserBookmarksIllust.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserIllusts>();
         }
 
-        //关注者的新作品
+        /// <summary>
+        /// 关注者的新作品
+        /// </summary>
+        /// <param name="Restrict"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserIllusts> GetIllustFollowAsync(string Restrict = "public", string Offset = null,
             bool RequireAuth = true)
         {
@@ -93,10 +124,15 @@ namespace PixivCS
             };
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustFollow.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserIllusts>();
         }
 
-        //作品详情
+        /// <summary>
+        /// 作品详情
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.IllustDetail> GetIllustDetailAsync(string IllustID, bool RequireAuth = true)
         {
             string url = "https://app-api.pixiv.net/v1/illust/detail";
@@ -105,11 +141,17 @@ namespace PixivCS
                 ("illust_id", IllustID)
             };
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustDetail.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.IllustDetail>();
         }
 
-        //作品评论
-        //IncludeTotalComments决定是否在返回的JSON中包含总评论数
+        /// <summary>
+        /// 作品评论
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="Offset"></param>
+        /// <param name="IncludeTotalComments">决定是否在返回的JSON中包含总评论数</param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.IllustComments> GetIllustCommentsAsync(string IllustID, string Offset = null,
             bool? IncludeTotalComments = null, bool RequireAuth = true)
         {
@@ -122,10 +164,17 @@ namespace PixivCS
             if (IncludeTotalComments != null) query.Add(("include_total_comments",
                 IncludeTotalComments.Value ? "true" : "false"));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustComments.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.IllustComments>();
         }
 
-        //发表评论
+        /// <summary>
+        /// 发表评论
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="Comment"></param>
+        /// <param name="ParentCommentID"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.IllustCommentAddResult> PostIllustCommentAddAsync(string IllustID, string Comment,
             string ParentCommentID = null, bool RequireAuth = true)
         {
@@ -139,10 +188,17 @@ namespace PixivCS
                 data.Add("parent_comment_id", ParentCommentID);
             var res = await RequestCall("POST", url, Body: new FormUrlEncodedContent(data),
                 RequireAuth: RequireAuth);
-            return Objects.IllustCommentAddResult.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.IllustCommentAddResult>();
         }
 
-        //相关作品
+        /// <summary>
+        /// 相关作品
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="Filter"></param>
+        /// <param name="SeedIllustIDs"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserIllusts> GetIllustRelatedAsync(string IllustID, string Filter = "for_ios",
             List<string> SeedIllustIDs = null, bool RequireAuth = true)
         {
@@ -158,11 +214,23 @@ namespace PixivCS
                     query.Add(("seed_illust_ids[]", i));
             }
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustRelated.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserIllusts>();
         }
 
-        //首页推荐
-        //content_type: [illust, manga]
+        /// <summary>
+        /// 首页推荐
+        /// </summary>
+        /// <param name="ContentType">content_type: [illust, manga]</param>
+        /// <param name="IncludeRankingLabel"></param>
+        /// <param name="Filter"></param>
+        /// <param name="MaxBookmarkIDForRecommended"></param>
+        /// <param name="MinBookmarkIDForRecentIllust"></param>
+        /// <param name="Offset"></param>
+        /// <param name="IncludeRankingIllusts"></param>
+        /// <param name="BookmarkIllustIDs"></param>
+        /// <param name="IncludePrivacyPolicy"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.IllustRecommended> GetIllustRecommendedAsync(string ContentType = "illust",
             bool IncludeRankingLabel = true, string Filter = "for_ios",
             string MaxBookmarkIDForRecommended = null,
@@ -197,12 +265,18 @@ namespace PixivCS
             if (!string.IsNullOrEmpty(IncludePrivacyPolicy))
                 query.Add(("include_privacy_policy", IncludePrivacyPolicy));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustRecommended.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.IllustRecommended>();
         }
 
-        //作品排行
-        //mode: [day, week, month, day_male, day_female, week_original, week_rookie, day_manga]
-        //date: yyyy-mm-dd
+        /// <summary>
+        /// 作品排行
+        /// </summary>
+        /// <param name="Mode">mode: [day, week, month, day_male, day_female, week_original, week_rookie, day_manga]</param>
+        /// <param name="Filter"></param>
+        /// <param name="Date">date: yyyy-mm-dd</param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserIllusts> GetIllustRankingAsync(string Mode = "day", string Filter = "for_ios",
             string Date = null, string Offset = null, bool RequireAuth = true)
         {
@@ -215,7 +289,7 @@ namespace PixivCS
             if (!string.IsNullOrEmpty(Date)) query.Add(("date", Date));
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustRanking.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserIllusts>();
         }
 
         //趋势标签
@@ -227,16 +301,25 @@ namespace PixivCS
                 ("filter", Filter)
             };
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.TrendingTagsIllust.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.TrendingTagsIllust>();
         }
 
-        //搜索
-        //search_target - 搜索类型
-        //  partial_match_for_tags  - 标签部分一致
-        //  exact_match_for_tags    - 标签完全一致
-        //  title_and_caption       - 标题说明文
-        //sort: [date_desc, date_asc]
-        //duration: [within_last_day, within_last_week, within_last_month]
+        /// <summary>
+        /// 搜索
+        /// </summary>
+        /// <param name="Word"></param>
+        /// <param name="SearchTarget">
+        /// search_target - 搜索类型<br/>
+        /// <c>partial_match_for_tags</c>  - 标签部分一致<br/>
+        /// <c>exact_match_for_tags</c>    - 标签完全一致<br/>
+        /// <c>title_and_caption</c>       - 标题说明文<br/>
+        /// </param>
+        /// <param name="Sort">sort: [date_desc, date_asc]</param>
+        /// <param name="Duration">duration: [within_last_day, within_last_week, within_last_month]</param>
+        /// <param name="Filter"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.SearchIllustResult> GetSearchIllustAsync(string Word, string SearchTarget = "partial_match_for_tags",
             string Sort = "date_desc", string Duration = null, string Filter = "for_ios", string Offset = null,
             bool RequireAuth = true)
@@ -252,10 +335,15 @@ namespace PixivCS
             if (!string.IsNullOrEmpty(Duration)) query.Add(("duration", Duration));
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.SearchIllustResult.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.SearchIllustResult>();
         }
 
-        //作品收藏详情
+        /// <summary>
+        /// 作品收藏详情
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.IllustBookmarkDetail> GetIllustBookmarkDetailAsync(string IllustID, bool RequireAuth = true)
         {
             string url = "https://app-api.pixiv.net/v2/illust/bookmark/detail";
@@ -264,10 +352,17 @@ namespace PixivCS
                 ("illust_id", IllustID)
             };
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.IllustBookmarkDetail.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.IllustBookmarkDetail>();
         }
 
-        //新增收藏
+        /// <summary>
+        /// 新增收藏
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="Restrict"></param>
+        /// <param name="Tags"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task PostIllustBookmarkAddAsync(string IllustID, string Restrict = "public",
             List<string> Tags = null, bool RequireAuth = true)
         {
@@ -288,7 +383,12 @@ namespace PixivCS
                 RequireAuth: RequireAuth);
         }
 
-        //删除收藏
+        /// <summary>
+        /// 删除收藏
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task PostIllustBookmarkDeleteAsync(string IllustID, bool RequireAuth = true)
         {
             string url = "https://app-api.pixiv.net/v1/illust/bookmark/delete";
@@ -300,7 +400,13 @@ namespace PixivCS
                 RequireAuth: RequireAuth);
         }
 
-        //用户收藏标签列表
+        /// <summary>
+        /// 用户收藏标签列表
+        /// </summary>
+        /// <param name="Restrict"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserBookmarkTags> GetUserBookmarkTagsIllustAsync(string Restrict = "public", string Offset = null,
             bool RequireAuth = true)
         {
@@ -311,10 +417,17 @@ namespace PixivCS
             };
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserBookmarkTags.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserBookmarkTags>();
         }
 
-        //Following用户列表
+        /// <summary>
+        /// Following用户列表
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Restrict"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserFollowList> GetUserFollowingAsync(string UserID, string Restrict = "public",
             string Offset = null, bool RequireAuth = true)
         {
@@ -326,10 +439,17 @@ namespace PixivCS
             };
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserFollowList.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserFollowList>();
         }
 
-        //Followers用户列表
+        /// <summary>
+        /// Followers用户列表
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Restrict"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserFollowList> GetUserFollowerAsync(string UserID, string Restrict = "public",
             string Offset = null, bool RequireAuth = true)
         {
@@ -341,10 +461,16 @@ namespace PixivCS
             };
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserFollower.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserFollowList>();
         }
 
-        //关注用户
+        /// <summary>
+        /// 关注用户
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Restrict"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task PostUserFollowAddAsync(string UserID, string Restrict = "public",
             bool RequireAuth = true)
         {
@@ -358,7 +484,13 @@ namespace PixivCS
                 RequireAuth: RequireAuth);
         }
 
-        //取关用户
+        /// <summary>
+        /// 取关用户
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Restrict"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task PostUserFollowDeleteAsync(string UserID, string Restrict = "public",
             bool RequireAuth = true)
         {
@@ -372,7 +504,13 @@ namespace PixivCS
                 RequireAuth: RequireAuth);
         }
 
-        //好P友
+        /// <summary>
+        /// 好P友
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserFollowList> GetUserMyPixivAsync(string UserID, string Offset = null,
             bool RequireAuth = true)
         {
@@ -383,10 +521,17 @@ namespace PixivCS
             };
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserMyPixiv.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserFollowList>();
         }
 
-        //黑名单用户
+        /// <summary>
+        /// 黑名单用户
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="Filter"></param>
+        /// <param name="Offset"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UserList> GetUserListAsync(string UserID, string Filter = "for_ios",
             string Offset = null, bool RequireAuth = true)
         {
@@ -398,10 +543,15 @@ namespace PixivCS
             };
             if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UserList.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UserList>();
         }
 
-        //Ugoira信息
+        /// <summary>
+        /// Ugoira信息
+        /// </summary>
+        /// <param name="IllustID"></param>
+        /// <param name="RequireAuth"></param>
+        /// <returns></returns>
         public async Task<Objects.UgoiraMetadata> GetUgoiraMetadataAsync(string IllustID, bool RequireAuth = true)
         {
             string url = "https://app-api.pixiv.net/v1/ugoira/metadata";
@@ -410,10 +560,17 @@ namespace PixivCS
                 ("illust_id", IllustID)
             };
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
-            return Objects.UgoiraMetadata.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.UgoiraMetadata>();
         }
 
-        //特辑详情（伪装成Chrome）
+        /// <summary>
+        /// 特辑详情
+        /// </summary>
+        /// <remarks>
+        /// 伪装成Chrome
+        /// </remarks>
+        /// <param name="ShowcaseID"></param>
+        /// <returns></returns>
         public async Task<Objects.ShowcaseArticle> GetShowcaseArticleAsync(string ShowcaseID)
         {
             string url = "https://www.pixiv.net/ajax/showcase/article";
@@ -427,7 +584,7 @@ namespace PixivCS
                 ("article_id", ShowcaseID)
             };
             var res = await RequestCall("GET", url, headers, Query: query, RequireAuth: false);
-            return Objects.ShowcaseArticle.FromJson(await GetResponseString(res));
+            return await res.GetResult<Objects.ShowcaseArticle>();
         }
     }
 }

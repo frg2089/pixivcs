@@ -11,14 +11,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Security.Cryptography;
 using System.Timers;
+using PixivCS.Utils;
+using PixivCS.Exceptions;
 
 namespace PixivCS
 {
-    public class PixivException : Exception
-    {
-        public PixivException() { }
-        public PixivException(string msg) : base(msg) { }
-    }
 
     public class RefreshEventArgs : EventArgs
     {
@@ -36,7 +33,6 @@ namespace PixivCS
 
     public class PixivBaseAPI
     {
-
         // 参考自下面的链接
         // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client#create-and-initialize-httpclient
         // https://stackoverflow.com/questions/15705092/do-httpclient-and-httpclienthandler-have-to-be-disposed
@@ -107,17 +103,18 @@ namespace PixivCS
 
         //用于生成带参数的url
         private static string GetQueryString(List<(string, string)> query)
-        {
-            var array = (from i in query
-                         select string.Format("{0}={1}", HttpUtility.UrlEncode(i.Item1),
-                         HttpUtility.UrlEncode(i.Item2)))
-                .ToArray();
-            return "?" + string.Join("&", array);
-        }
+            => string.Join("&", query.Select(i => $"{HttpUtility.UrlEncode(i.Item1)}={HttpUtility.UrlEncode(i.Item2)}"));
+        private static string GetQueryString(Dictionary<string, string> query)
+            => string.Join("&", query.Select(i => $"{HttpUtility.UrlEncode(i.Key)}={HttpUtility.UrlEncode(i.Value)}"));
 
+        /// <summary>
+        /// 登录验证
+        /// </summary>
+        /// <exception cref="PixivAuthException">尚未登录</exception>
         public void RequireAuth()
         {
-            if (AccessToken == null) throw new PixivException("Authentication required!");
+            if (AccessToken == null)
+                throw new PixivAuthException("Authentication required!");
         }
 
         public async Task<HttpResponseMessage> RequestCall(string Method, string Url,
@@ -150,7 +147,8 @@ namespace PixivCS
                         Dictionary<string, string> headersDictionary = new Dictionary<string, string>();
                         foreach (var header in headers.Split(new[] { "\r\n" }, StringSplitOptions.None))
                         {
-                            if (string.IsNullOrWhiteSpace(header)) break;
+                            if (string.IsNullOrWhiteSpace(header))
+                                break;
                             if (!header.Contains(": "))
                             {
                                 var status = header.Split(new[] { " " }, StringSplitOptions.None);
@@ -214,7 +212,8 @@ namespace PixivCS
                                     else
                                     {
                                         //末端
-                                        if (chunkLength == 0) break;
+                                        if (chunkLength == 0)
+                                            break;
                                         //分块内容
                                         await parsedChunckedResult.WriteAsync(result, position, chunkLength);
                                         position += chunkLength + 2;
@@ -229,7 +228,8 @@ namespace PixivCS
                         foreach (var pair in headersDictionary)
                         {
                             var added = res.Headers.TryAddWithoutValidation(pair.Key, pair.Value);
-                            if (!added) res.Content.Headers.Add(pair.Key, pair.Value);
+                            if (!added)
+                                res.Content.Headers.Add(pair.Key, pair.Value);
                         }
                         return res;
                     }
@@ -254,18 +254,6 @@ namespace PixivCS
             }
         }
 
-        //以字符串形式拿回Response
-        public static async Task<string> GetResponseString(HttpResponseMessage Response)
-        {
-            return await Response.Content.ReadAsStringAsync();
-        }
-
-        //以流形式拿回Response
-        public static async Task<Stream> GetResponseStream(HttpResponseMessage Response)
-        {
-            return await Response.Content.ReadAsStreamAsync();
-        }
-
         public void SetClient(string ClientID, string ClientSecret, string HashSecret)
         {
             clientID = ClientID;
@@ -273,22 +261,18 @@ namespace PixivCS
             hashSecret = HashSecret;
         }
 
-        //用户名和密码登录
+        /// <summary>
+        /// 用户名和密码登录
+        /// </summary>
+        /// <remarks>
+        /// 通过用户名和密码登录账户<br/>
+        /// 此方法将会调用<see cref="AuthAsync(Dictionary{string, string}, Dictionary{string, string})"/>
+        /// </remarks>
+        /// <exception cref="PixivException">尚不明确的其他错误</exception>
+        /// <exception cref="PixivAuthException">用户名密码错误</exception>
+        /// <exception cref="HttpRequestException">Http连接失败()</exception>
         public async Task<Objects.AuthResult> AuthAsync(string Username, string Password)
         {
-            string MD5Hash(string Input)
-            {
-                if (string.IsNullOrEmpty(Input)) return null;
-                using (var md5 = MD5.Create())
-                {
-                    var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(Input.Trim()));
-                    StringBuilder builder = new StringBuilder();
-                    for (int i = 0; i < bytes.Length; i++)
-                        builder.Append(bytes[i].ToString("x2"));
-                    return builder.ToString();
-                }
-            }
-            string url = "https://oauth.secure.pixiv.net/auth/token";
             string time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
             Dictionary<string, string> headers = new Dictionary<string, string>
             {
@@ -305,21 +289,21 @@ namespace PixivCS
                 { "username", Username },
                 { "password", Password }
             };
-            var res = await RequestCall("POST", url, headers, Body: new FormUrlEncodedContent(data));
-            int status = (int)res.StatusCode;
-            if (!(status == 200 || status == 301 || status == 302))
-                throw new PixivException("[ERROR] Auth() failed! Check Username and Password.");
-            var resJSON = Objects.AuthResult.FromJson(await GetResponseString(res));
-            AccessToken = resJSON.Response.AccessToken;
-            UserID = resJSON.Response.User.Id;
-            RefreshToken = resJSON.Response.RefreshToken;
-            return resJSON;
+            return await AuthAsync(headers, data);
         }
 
-        //RefreshToken登录
+        /// <summary>
+        /// RefreshToken登录
+        /// </summary>
+        /// <remarks>
+        /// 通过RefreshToken登录账户<br/>
+        /// 此方法将会调用<see cref="AuthAsync(Dictionary{string, string}, Dictionary{string, string})"/>
+        /// </remarks>
+        /// <exception cref="PixivException">尚不明确的其他错误</exception>
+        /// <exception cref="PixivAuthException">用户名密码错误</exception>
+        /// <exception cref="HttpRequestException">Http连接失败()</exception>
         public async Task<Objects.AuthResult> AuthAsync(string RefreshToken)
         {
-            string url = "https://oauth.secure.pixiv.net/auth/token";
             Dictionary<string, string> headers = new Dictionary<string, string>
             {
                 { "User-Agent", "PixivAndroidApp/5.0.64 (Android 6.0)" }
@@ -332,15 +316,54 @@ namespace PixivCS
                 { "grant_type", "refresh_token" },
                 { "refresh_token", RefreshToken }
             };
-            var res = await RequestCall("POST", url, headers, Body: new FormUrlEncodedContent(data));
-            int status = (int)res.StatusCode;
-            if (!(status == 200 || status == 301 || status == 302))
-                throw new PixivException("[ERROR] Auth() failed! Check Username and Password.");
-            var resJSON = Objects.AuthResult.FromJson(await GetResponseString(res));
+            return await AuthAsync(headers, data);
+        }
+
+        /// <summary>
+        /// 登录逻辑
+        /// </summary>
+        /// <remarks>
+        /// 负责发送请求以及验证返回内容的方法<br/>
+        /// 此方法会修改当前对象的以下属性<br/>
+        /// <see cref="AccessToken"/><br/>
+        /// <see cref="RefreshToken"/><br/>
+        /// <see cref="UserID"/>
+        /// </remarks>
+        /// <exception cref="PixivException">尚不明确的其他错误</exception>
+        /// <exception cref="PixivAuthException">用户名密码错误</exception>
+        /// <exception cref="HttpRequestException">Http连接失败()</exception>
+        protected virtual async ValueTask<Objects.AuthResult> AuthAsync(Dictionary<string, string> headers, Dictionary<string, string> data)
+        {
+            const string url = "https://oauth.secure.pixiv.net/auth/token";
+            var res = await RequestCall("POST", url, headers, Body: new FormUrlEncodedContent(data)).ConfigureAwait(false);
+            var resJSON = await res.GetResult<Objects.AuthResult>().ConfigureAwait(false);
             AccessToken = resJSON.Response.AccessToken;
             UserID = resJSON.Response.User.Id;
-            this.RefreshToken = resJSON.Response.RefreshToken;
+            RefreshToken = resJSON.Response.RefreshToken;
             return resJSON;
+        }
+
+        /// <summary>
+        /// 计算字符串的MD5值
+        /// </summary>
+        /// <remarks>
+        /// 这个方法将会返回一串16进制的表示MD5的字符串
+        /// </remarks>
+        /// <param name="Input">将要进行计算的字符串</param>
+        /// <returns>MD5字符串</returns>
+        protected static string MD5Hash(string Input)
+        {
+            if (string.IsNullOrEmpty(Input))
+                throw new ArgumentNullException(nameof(Input));
+
+            using (var md5 = MD5.Create())
+            {
+                var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(Input.Trim()));
+                StringBuilder builder = new StringBuilder(bytes.Length << 1);
+                for (int i = 0; i < bytes.Length; i++)
+                    builder.Append(bytes[i].ToString("x2"));
+                return builder.ToString();
+            }
         }
     }
 }

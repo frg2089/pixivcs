@@ -4,360 +4,357 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PixivCS.Objects
 {
 
-    public partial class ShowcaseArticle
+    public partial class ShowcaseArticle : ResultBase
     {
-        [JsonProperty("error")]
-        public bool Error { get; set; }
-
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public Body[] Body { get; set; }
     }
 
     public partial class Body
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("lang")]
+        [JsonPropertyName("lang")]
         public string Lang { get; set; }
 
-        [JsonProperty("entry")]
+        [JsonPropertyName("entry")]
         public Entry Entry { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public EntryTag[] Tags { get; set; }
 
-        [JsonProperty("thumbnailUrl")]
+        [JsonPropertyName("thumbnailUrl")]
         public Uri ThumbnailUrl { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("publishDate")]
+        [JsonPropertyName("publishDate")]
         public long PublishDate { get; set; }
 
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public string Category { get; set; }
 
-        [JsonProperty("subCategory")]
+        [JsonPropertyName("subCategory")]
         public string SubCategory { get; set; }
 
-        [JsonProperty("subCategoryLabel")]
+        [JsonPropertyName("subCategoryLabel")]
         public string SubCategoryLabel { get; set; }
 
-        [JsonProperty("subCategoryIntroduction")]
+        [JsonPropertyName("subCategoryIntroduction")]
         public string SubCategoryIntroduction { get; set; }
 
-        [JsonProperty("introduction")]
+        [JsonPropertyName("introduction")]
         public string Introduction { get; set; }
 
-        [JsonProperty("footer")]
+        [JsonPropertyName("footer")]
         public string Footer { get; set; }
 
-        [JsonProperty("illusts")]
+        [JsonPropertyName("illusts")]
         public BodyIllust[] Illusts { get; set; }
 
-        [JsonProperty("relatedArticles")]
+        [JsonPropertyName("relatedArticles")]
         public RelatedArticle[] RelatedArticles { get; set; }
 
-        [JsonProperty("followingUserIds")]
+        [JsonPropertyName("followingUserIds")]
         public dynamic[] FollowingUserIds { get; set; }
 
-        [JsonProperty("isOnlyOneUser")]
+        [JsonPropertyName("isOnlyOneUser")]
         public bool IsOnlyOneUser { get; set; }
     }
 
     public partial class Entry
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("pure_title")]
+        [JsonPropertyName("pure_title")]
         public string PureTitle { get; set; }
 
-        [JsonProperty("catchphrase")]
+        [JsonPropertyName("catchphrase")]
         public string Catchphrase { get; set; }
 
-        [JsonProperty("header")]
+        [JsonPropertyName("header")]
         public string Header { get; set; }
 
-        [JsonProperty("body")]
+        [JsonPropertyName("body")]
         public string Body { get; set; }
 
-        [JsonProperty("footer")]
+        [JsonPropertyName("footer")]
         public string Footer { get; set; }
 
-        [JsonProperty("sidebar")]
+        [JsonPropertyName("sidebar")]
         public string Sidebar { get; set; }
 
-        [JsonProperty("publish_date")]
+        [JsonPropertyName("publish_date")]
         public long PublishDate { get; set; }
 
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public string Language { get; set; }
 
-        [JsonProperty("pixivision_category_slug")]
+        [JsonPropertyName("pixivision_category_slug")]
         public string PixivisionCategorySlug { get; set; }
 
-        [JsonProperty("pixivision_category")]
+        [JsonPropertyName("pixivision_category")]
         public PixivisionCategory PixivisionCategory { get; set; }
 
-        [JsonProperty("pixivision_subcategory_slug")]
+        [JsonPropertyName("pixivision_subcategory_slug")]
         public string PixivisionSubcategorySlug { get; set; }
 
-        [JsonProperty("pixivision_subcategory")]
+        [JsonPropertyName("pixivision_subcategory")]
         public PixivisionSubcategory PixivisionSubcategory { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public EntryTag[] Tags { get; set; }
 
-        [JsonProperty("article_url")]
+        [JsonPropertyName("article_url")]
         public Uri ArticleUrl { get; set; }
 
-        [JsonProperty("intro")]
+        [JsonPropertyName("intro")]
         public string Intro { get; set; }
 
-        [JsonProperty("facebook_count")]
+        [JsonPropertyName("facebook_count")]
         public string FacebookCount { get; set; }
 
-        [JsonProperty("twitter_count")]
+        [JsonPropertyName("twitter_count")]
         public string TwitterCount { get; set; }
     }
 
     public partial class PixivisionCategory
     {
-        [JsonProperty("label")]
+        [JsonPropertyName("label")]
         public string Label { get; set; }
 
-        [JsonProperty("introduction")]
+        [JsonPropertyName("introduction")]
         public string Introduction { get; set; }
     }
 
     public partial class PixivisionSubcategory
     {
-        [JsonProperty("label")]
+        [JsonPropertyName("label")]
         public string Label { get; set; }
 
-        [JsonProperty("label_en")]
+        [JsonPropertyName("label_en")]
         public string LabelEn { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("introduction")]
+        [JsonPropertyName("introduction")]
         public string Introduction { get; set; }
 
-        [JsonProperty("image_url")]
+        [JsonPropertyName("image_url")]
         public string ImageUrl { get; set; }
 
-        [JsonProperty("big_image_url")]
+        [JsonPropertyName("big_image_url")]
         public string BigImageUrl { get; set; }
     }
 
     public partial class EntryTag
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 
     public partial class BodyIllust
     {
-        [JsonProperty("spotlight_article_id")]
+        [JsonPropertyName("spotlight_article_id")]
         public long SpotlightArticleId { get; set; }
 
-        [JsonProperty("illust_id")]
+        [JsonPropertyName("illust_id")]
         public long IllustId { get; set; }
 
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("language")]
+        [JsonPropertyName("language")]
         public string Language { get; set; }
 
-        [JsonProperty("illust_user_id")]
+        [JsonPropertyName("illust_user_id")]
         public string IllustUserId { get; set; }
 
-        [JsonProperty("illust_title")]
+        [JsonPropertyName("illust_title")]
         public string IllustTitle { get; set; }
 
-        [JsonProperty("illust_ext")]
+        [JsonPropertyName("illust_ext")]
         public string IllustExt { get; set; }
 
-        [JsonProperty("illust_width")]
+        [JsonPropertyName("illust_width")]
         public string IllustWidth { get; set; }
 
-        [JsonProperty("illust_height")]
+        [JsonPropertyName("illust_height")]
         public string IllustHeight { get; set; }
 
-        [JsonProperty("illust_restrict")]
+        [JsonPropertyName("illust_restrict")]
         public string IllustRestrict { get; set; }
 
-        [JsonProperty("illust_x_restrict")]
+        [JsonPropertyName("illust_x_restrict")]
         public string IllustXRestrict { get; set; }
 
-        [JsonProperty("illust_create_date")]
+        [JsonPropertyName("illust_create_date")]
         public string IllustCreateDate { get; set; }
 
-        [JsonProperty("illust_upload_date")]
+        [JsonPropertyName("illust_upload_date")]
         public string IllustUploadDate { get; set; }
 
-        [JsonProperty("illust_server_id")]
+        [JsonPropertyName("illust_server_id")]
         public string IllustServerId { get; set; }
 
-        [JsonProperty("illust_hash")]
+        [JsonPropertyName("illust_hash")]
         public string IllustHash { get; set; }
 
-        [JsonProperty("illust_type")]
+        [JsonPropertyName("illust_type")]
         public string IllustType { get; set; }
 
-        [JsonProperty("illust_sanity_level")]
+        [JsonPropertyName("illust_sanity_level")]
         public long IllustSanityLevel { get; set; }
 
-        [JsonProperty("illust_book_style")]
+        [JsonPropertyName("illust_book_style")]
         public string IllustBookStyle { get; set; }
 
-        [JsonProperty("illust_page_count")]
+        [JsonPropertyName("illust_page_count")]
         public string IllustPageCount { get; set; }
 
-        [JsonProperty("illust_custom_thumbnail_upload_datetime")]
+        [JsonPropertyName("illust_custom_thumbnail_upload_datetime")]
         public dynamic IllustCustomThumbnailUploadDatetime { get; set; }
 
-        [JsonProperty("illust_comment")]
+        [JsonPropertyName("illust_comment")]
         public string IllustComment { get; set; }
 
-        [JsonProperty("user_account")]
+        [JsonPropertyName("user_account")]
         public string UserAccount { get; set; }
 
-        [JsonProperty("user_name")]
+        [JsonPropertyName("user_name")]
         public string UserName { get; set; }
 
-        [JsonProperty("user_comment")]
+        [JsonPropertyName("user_comment")]
         public string UserComment { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public Url Url { get; set; }
 
-        [JsonProperty("ugoira_meta")]
+        [JsonPropertyName("ugoira_meta")]
         public dynamic UgoiraMeta { get; set; }
 
-        [JsonProperty("user_icon")]
+        [JsonPropertyName("user_icon")]
         public Uri UserIcon { get; set; }
     }
 
     public partial class Url
     {
-        [JsonProperty("1200x1200")]
+        [JsonPropertyName("1200x1200")]
         public Uri The1200X1200 { get; set; }
 
-        [JsonProperty("768x1200")]
+        [JsonPropertyName("768x1200")]
         public Uri The768X1200 { get; set; }
 
-        [JsonProperty("ugoira600x600")]
+        [JsonPropertyName("ugoira600x600")]
         public string Ugoira600X600 { get; set; }
 
-        [JsonProperty("ugoira1920x1080")]
+        [JsonPropertyName("ugoira1920x1080")]
         public string Ugoira1920X1080 { get; set; }
     }
 
     public partial class RelatedArticle
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("ja")]
+        [JsonPropertyName("ja")]
         public PrivacyPolicy Ja { get; set; }
 
-        [JsonProperty("en")]
+        [JsonPropertyName("en")]
         public PrivacyPolicy En { get; set; }
 
-        [JsonProperty("zh")]
+        [JsonPropertyName("zh")]
         public PrivacyPolicy Zh { get; set; }
 
-        [JsonProperty("zh_tw")]
+        [JsonPropertyName("zh_tw")]
         public PrivacyPolicy ZhTw { get; set; }
 
-        [JsonProperty("publish_date")]
+        [JsonPropertyName("publish_date")]
         public long PublishDate { get; set; }
 
-        [JsonProperty("category")]
+        [JsonPropertyName("category")]
         public string Category { get; set; }
 
-        [JsonProperty("pixivision_category_slug")]
+        [JsonPropertyName("pixivision_category_slug")]
         public string PixivisionCategorySlug { get; set; }
 
-        [JsonProperty("pixivision_subcategory_slug")]
+        [JsonPropertyName("pixivision_subcategory_slug")]
         public string PixivisionSubcategorySlug { get; set; }
 
-        [JsonProperty("thumbnail")]
+        [JsonPropertyName("thumbnail")]
         public string Thumbnail { get; set; }
 
-        [JsonProperty("thumbnail_illust_id")]
+        [JsonPropertyName("thumbnail_illust_id")]
         public string ThumbnailIllustId { get; set; }
 
-        [JsonProperty("has_body")]
+        [JsonPropertyName("has_body")]
         public string HasBody { get; set; }
 
-        [JsonProperty("is_pr")]
+        [JsonPropertyName("is_pr")]
         public string IsPr { get; set; }
 
-        [JsonProperty("pr_client_name")]
+        [JsonPropertyName("pr_client_name")]
         public string PrClientName { get; set; }
 
-        [JsonProperty("edit_status")]
+        [JsonPropertyName("edit_status")]
         public string EditStatus { get; set; }
 
-        [JsonProperty("translation_status")]
+        [JsonPropertyName("translation_status")]
         public string TranslationStatus { get; set; }
 
-        [JsonProperty("is_sample")]
+        [JsonPropertyName("is_sample")]
         public string IsSample { get; set; }
 
-        [JsonProperty("illusts")]
+        [JsonPropertyName("illusts")]
         public dynamic[] Illusts { get; set; }
 
-        [JsonProperty("novel_ids")]
+        [JsonPropertyName("novel_ids")]
         public dynamic[] NovelIds { get; set; }
 
-        [JsonProperty("memo")]
+        [JsonPropertyName("memo")]
         public string Memo { get; set; }
 
-        [JsonProperty("facebook_count")]
+        [JsonPropertyName("facebook_count")]
         public string FacebookCount { get; set; }
 
-        [JsonProperty("tweet_count")]
+        [JsonPropertyName("tweet_count")]
         public string TweetCount { get; set; }
 
-        [JsonProperty("tweet_max_count")]
+        [JsonPropertyName("tweet_max_count")]
         public string TweetMaxCount { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public dynamic[] Tags { get; set; }
 
-        [JsonProperty("tag_ids")]
+        [JsonPropertyName("tag_ids")]
         public dynamic TagIds { get; set; }
 
-        [JsonProperty("numbered_tags")]
+        [JsonPropertyName("numbered_tags")]
         public dynamic[] NumberedTags { get; set; }
 
-        [JsonProperty("main_abtest_pattern_id")]
+        [JsonPropertyName("main_abtest_pattern_id")]
         public string MainAbtestPatternId { get; set; }
 
-        [JsonProperty("advertisement_id")]
+        [JsonPropertyName("advertisement_id")]
         public string AdvertisementId { get; set; }
     }
 
@@ -365,701 +362,724 @@ namespace PixivCS.Objects
     {
     }
 
-    public partial class UgoiraMetadata
+    public partial class UgoiraMetadata : ResultBase
     {
-        [JsonProperty("ugoira_metadata")]
+        [JsonPropertyName("ugoira_metadata")]
         public UgoiraMetadataClass UgoiraMetadataUgoiraMetadata { get; set; }
     }
 
     public partial class UgoiraMetadataClass
     {
-        [JsonProperty("zip_urls")]
+        [JsonPropertyName("zip_urls")]
         public Urls ZipUrls { get; set; }
 
-        [JsonProperty("frames")]
+        [JsonPropertyName("frames")]
         public Frame[] Frames { get; set; }
     }
 
     public partial class Frame
     {
-        [JsonProperty("file")]
+        [JsonPropertyName("file")]
         public string File { get; set; }
 
-        [JsonProperty("delay")]
+        [JsonPropertyName("delay")]
         public long Delay { get; set; }
     }
 
     public partial class Urls
     {
-        [JsonProperty("medium")]
+        [JsonPropertyName("medium")]
         public Uri Medium { get; set; }
     }
 
-    public partial class UserList
+    public partial class UserList : ResultBase
     {
-        [JsonProperty("users")]
+        [JsonPropertyName("users")]
         public dynamic[] Users { get; set; }
     }
 
-    public partial class UserFollowList
+    public partial class UserFollowList : ResultBase
     {
-        [JsonProperty("user_previews")]
+        [JsonPropertyName("user_previews")]
         public UserPreview[] UserPreviews { get; set; }
 
-        [JsonProperty("next_url")]
+        [JsonPropertyName("next_url")]
         public Uri NextUrl { get; set; }
     }
 
     public partial class UserPreview
     {
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public IllustUser User { get; set; }
 
-        [JsonProperty("illusts")]
+        [JsonPropertyName("illusts")]
         public UserPreviewIllust[] Illusts { get; set; }
 
-        [JsonProperty("novels")]
+        [JsonPropertyName("novels")]
         public dynamic[] Novels { get; set; }
 
-        [JsonProperty("is_muted")]
+        [JsonPropertyName("is_muted")]
         public bool IsMuted { get; set; }
     }
 
     public partial class UserPreviewIllust
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonProperty("image_urls")]
+        [JsonPropertyName("image_urls")]
         public ImageUrls ImageUrls { get; set; }
 
-        [JsonProperty("caption")]
+        [JsonPropertyName("caption")]
         public string Caption { get; set; }
 
-        [JsonProperty("restrict")]
+        [JsonPropertyName("restrict")]
         public long Restrict { get; set; }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public IllustUser User { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public IllustTag[] Tags { get; set; }
 
-        [JsonProperty("tools")]
+        [JsonPropertyName("tools")]
         public string[] Tools { get; set; }
 
-        [JsonProperty("create_date")]
+        [JsonPropertyName("create_date")]
         public string CreateDate { get; set; }
 
-        [JsonProperty("page_count")]
+        [JsonPropertyName("page_count")]
         public long PageCount { get; set; }
 
-        [JsonProperty("width")]
+        [JsonPropertyName("width")]
         public long Width { get; set; }
 
-        [JsonProperty("height")]
+        [JsonPropertyName("height")]
         public long Height { get; set; }
 
-        [JsonProperty("sanity_level")]
+        [JsonPropertyName("sanity_level")]
         public long SanityLevel { get; set; }
 
-        [JsonProperty("x_restrict")]
+        [JsonPropertyName("x_restrict")]
         public long XRestrict { get; set; }
 
-        [JsonProperty("series")]
+        [JsonPropertyName("series")]
         public Series Series { get; set; }
 
-        [JsonProperty("meta_single_page")]
+        [JsonPropertyName("meta_single_page")]
         public MetaSinglePage MetaSinglePage { get; set; }
 
-        [JsonProperty("meta_pages")]
+        [JsonPropertyName("meta_pages")]
         public MetaPage[] MetaPages { get; set; }
 
-        [JsonProperty("total_view")]
+        [JsonPropertyName("total_view")]
         public long TotalView { get; set; }
 
-        [JsonProperty("total_bookmarks")]
+        [JsonPropertyName("total_bookmarks")]
         public long TotalBookmarks { get; set; }
 
-        [JsonProperty("is_bookmarked")]
+        [JsonPropertyName("is_bookmarked")]
         public bool IsBookmarked { get; set; }
 
-        [JsonProperty("visible")]
+        [JsonPropertyName("visible")]
         public bool Visible { get; set; }
 
-        [JsonProperty("is_muted")]
+        [JsonPropertyName("is_muted")]
         public bool IsMuted { get; set; }
 
-        [JsonProperty("total_comments", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("total_comments")]
         public long? TotalComments { get; set; }
     }
 
     public partial class ImageUrls
     {
-        [JsonProperty("square_medium")]
+        [JsonPropertyName("square_medium")]
         public Uri SquareMedium { get; set; }
 
-        [JsonProperty("medium")]
+        [JsonPropertyName("medium")]
         public Uri Medium { get; set; }
 
-        [JsonProperty("large")]
+        [JsonPropertyName("large")]
         public Uri Large { get; set; }
 
-        [JsonProperty("original", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("original")]
         public Uri Original { get; set; }
     }
 
     public partial class MetaPage
     {
-        [JsonProperty("image_urls")]
+        [JsonPropertyName("image_urls")]
         public ImageUrls ImageUrls { get; set; }
     }
 
     public partial class MetaSinglePage
     {
-        [JsonProperty("original_image_url", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("original_image_url")]
         public Uri OriginalImageUrl { get; set; }
     }
 
     public partial class Series
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
     }
 
     public partial class IllustTag
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("translated_name")]
+        [JsonPropertyName("translated_name")]
         public string TranslatedName { get; set; }
     }
 
     public partial class IllustUser
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("account")]
+        [JsonPropertyName("account")]
         public string Account { get; set; }
 
-        [JsonProperty("profile_image_urls")]
+        [JsonPropertyName("profile_image_urls")]
         public Urls ProfileImageUrls { get; set; }
 
-        [JsonProperty("is_followed", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("is_followed")]
         public bool? IsFollowed { get; set; }
 
-        [JsonProperty("comment", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("comment")]
         public string Comment { get; set; }
     }
 
-    public partial class UserBookmarkTags
+    public partial class UserBookmarkTags : ResultBase
     {
-        [JsonProperty("bookmark_tags")]
+        [JsonPropertyName("bookmark_tags")]
         public dynamic[] BookmarkTags { get; set; }
 
-        [JsonProperty("next_url")]
+        [JsonPropertyName("next_url")]
         public Uri NextUrl { get; set; }
     }
 
-    public partial class IllustBookmarkDetail
+    public partial class IllustBookmarkDetail : ResultBase
     {
-        [JsonProperty("bookmark_detail")]
+        [JsonPropertyName("bookmark_detail")]
         public BookmarkDetail BookmarkDetail { get; set; }
     }
 
     public partial class BookmarkDetail
     {
-        [JsonProperty("is_bookmarked")]
+        [JsonPropertyName("is_bookmarked")]
         public bool IsBookmarked { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public BookmarkDetailTag[] Tags { get; set; }
 
-        [JsonProperty("restrict")]
+        [JsonPropertyName("restrict")]
         public string Restrict { get; set; }
     }
 
     public partial class BookmarkDetailTag
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("is_registered")]
+        [JsonPropertyName("is_registered")]
         public bool IsRegistered { get; set; }
     }
 
-    public partial class SearchIllustResult
+    public partial class SearchIllustResult : ResultBase
     {
-        [JsonProperty("illusts")]
+        [JsonPropertyName("illusts")]
         public UserPreviewIllust[] Illusts { get; set; }
 
-        [JsonProperty("next_url")]
+        [JsonPropertyName("next_url")]
         public Uri NextUrl { get; set; }
 
-        [JsonProperty("search_span_limit")]
+        [JsonPropertyName("search_span_limit")]
         public long SearchSpanLimit { get; set; }
     }
 
-    public partial class TrendingTagsIllust
+    public partial class TrendingTagsIllust : ResultBase
     {
-        [JsonProperty("trend_tags")]
+        [JsonPropertyName("trend_tags")]
         public TrendTag[] TrendTags { get; set; }
     }
 
     public partial class TrendTag
     {
-        [JsonProperty("tag")]
+        [JsonPropertyName("tag")]
         public string Tag { get; set; }
 
-        [JsonProperty("translated_name")]
+        [JsonPropertyName("translated_name")]
         public string TranslatedName { get; set; }
 
-        [JsonProperty("illust")]
+        [JsonPropertyName("illust")]
         public UserPreviewIllust Illust { get; set; }
     }
 
-    public partial class UserIllusts
+    public partial class UserIllusts : ResultBase
     {
-        [JsonProperty("illusts")]
+        [JsonPropertyName("illusts")]
         public UserPreviewIllust[] Illusts { get; set; }
 
-        [JsonProperty("next_url")]
+        [JsonPropertyName("next_url")]
         public Uri NextUrl { get; set; }
     }
 
-    public partial class IllustRecommended
+    public partial class IllustRecommended : ResultBase
     {
-        [JsonProperty("illusts")]
+        [JsonPropertyName("illusts")]
         public UserPreviewIllust[] Illusts { get; set; }
 
-        [JsonProperty("ranking_illusts")]
+        [JsonPropertyName("ranking_illusts")]
         public dynamic[] RankingIllusts { get; set; }
 
-        [JsonProperty("contest_exists")]
+        [JsonPropertyName("contest_exists")]
         public bool ContestExists { get; set; }
 
-        [JsonProperty("privacy_policy")]
+        [JsonPropertyName("privacy_policy")]
         public PrivacyPolicy PrivacyPolicy { get; set; }
 
-        [JsonProperty("next_url")]
+        [JsonPropertyName("next_url")]
         public Uri NextUrl { get; set; }
     }
 
-    public partial class IllustCommentAddResult
+    public partial class IllustCommentAddResult : ResultBase
     {
-        [JsonProperty("comment")]
+        [JsonPropertyName("comment")]
         public Comment Comment { get; set; }
     }
 
     public partial class Comment
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
 
-        [JsonProperty("comment")]
+        [JsonPropertyName("comment")]
         public string CommentComment { get; set; }
 
-        [JsonProperty("date")]
+        [JsonPropertyName("date")]
         public string Date { get; set; }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public IllustUser User { get; set; }
 
-        [JsonProperty("has_replies", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("has_replies")]
         public bool? HasReplies { get; set; }
 
-        [JsonProperty("parent_comment", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("parent_comment")]
         public Comment ParentComment { get; set; }
     }
 
-    public partial class IllustComments
+    public partial class IllustComments : ResultBase
     {
-        [JsonProperty("total_comments")]
+        [JsonPropertyName("total_comments")]
         public long TotalComments { get; set; }
 
-        [JsonProperty("comments")]
+        [JsonPropertyName("comments")]
         public Comment[] Comments { get; set; }
 
-        [JsonProperty("next_url")]
+        [JsonPropertyName("next_url")]
         public Uri NextUrl { get; set; }
     }
 
-    public partial class IllustDetail
+    public partial class IllustDetail : ResultBase
     {
-        [JsonProperty("illust")]
+        [JsonPropertyName("illust")]
         public UserPreviewIllust Illust { get; set; }
     }
 
-    public partial class UserDetail
+    public partial class UserDetail : ResultBase
     {
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public IllustUser User { get; set; }
 
-        [JsonProperty("profile")]
+        [JsonPropertyName("profile")]
         public Profile Profile { get; set; }
 
-        [JsonProperty("profile_publicity")]
+        [JsonPropertyName("profile_publicity")]
         public ProfilePublicity ProfilePublicity { get; set; }
 
-        [JsonProperty("workspace")]
+        [JsonPropertyName("workspace")]
         public Workspace Workspace { get; set; }
     }
 
     public partial class Profile
     {
-        [JsonProperty("webpage")]
+        [JsonPropertyName("webpage")]
         public dynamic Webpage { get; set; }
 
-        [JsonProperty("gender")]
+        [JsonPropertyName("gender")]
         public string Gender { get; set; }
 
-        [JsonProperty("birth")]
+        [JsonPropertyName("birth")]
         public string Birth { get; set; }
 
-        [JsonProperty("birth_day")]
+        [JsonPropertyName("birth_day")]
         public string BirthDay { get; set; }
 
-        [JsonProperty("birth_year")]
+        [JsonPropertyName("birth_year")]
         public long BirthYear { get; set; }
 
-        [JsonProperty("region")]
+        [JsonPropertyName("region")]
         public string Region { get; set; }
 
-        [JsonProperty("address_id")]
+        [JsonPropertyName("address_id")]
         public long AddressId { get; set; }
 
-        [JsonProperty("country_code")]
+        [JsonPropertyName("country_code")]
         public string CountryCode { get; set; }
 
-        [JsonProperty("job")]
+        [JsonPropertyName("job")]
         public string Job { get; set; }
 
-        [JsonProperty("job_id")]
+        [JsonPropertyName("job_id")]
         public long JobId { get; set; }
 
-        [JsonProperty("total_follow_users")]
+        [JsonPropertyName("total_follow_users")]
         public long TotalFollowUsers { get; set; }
 
-        [JsonProperty("total_mypixiv_users")]
+        [JsonPropertyName("total_mypixiv_users")]
         public long TotalMypixivUsers { get; set; }
 
-        [JsonProperty("total_illusts")]
+        [JsonPropertyName("total_illusts")]
         public long TotalIllusts { get; set; }
 
-        [JsonProperty("total_manga")]
+        [JsonPropertyName("total_manga")]
         public long TotalManga { get; set; }
 
-        [JsonProperty("total_novels")]
+        [JsonPropertyName("total_novels")]
         public long TotalNovels { get; set; }
 
-        [JsonProperty("total_illust_bookmarks_public")]
+        [JsonPropertyName("total_illust_bookmarks_public")]
         public long TotalIllustBookmarksPublic { get; set; }
 
-        [JsonProperty("total_illust_series")]
+        [JsonPropertyName("total_illust_series")]
         public long TotalIllustSeries { get; set; }
 
-        [JsonProperty("total_novel_series")]
+        [JsonPropertyName("total_novel_series")]
         public long TotalNovelSeries { get; set; }
 
-        [JsonProperty("background_image_url")]
+        [JsonPropertyName("background_image_url")]
         public Uri BackgroundImageUrl { get; set; }
 
-        [JsonProperty("twitter_account")]
+        [JsonPropertyName("twitter_account")]
         public string TwitterAccount { get; set; }
 
-        [JsonProperty("twitter_url")]
+        [JsonPropertyName("twitter_url")]
         public Uri TwitterUrl { get; set; }
 
-        [JsonProperty("pawoo_url")]
+        [JsonPropertyName("pawoo_url")]
         public Uri PawooUrl { get; set; }
 
-        [JsonProperty("is_premium")]
+        [JsonPropertyName("is_premium")]
         public bool IsPremium { get; set; }
 
-        [JsonProperty("is_using_custom_profile_image")]
+        [JsonPropertyName("is_using_custom_profile_image")]
         public bool IsUsingCustomProfileImage { get; set; }
     }
 
     public partial class ProfilePublicity
     {
-        [JsonProperty("gender")]
+        [JsonPropertyName("gender")]
         public string Gender { get; set; }
 
-        [JsonProperty("region")]
+        [JsonPropertyName("region")]
         public string Region { get; set; }
 
-        [JsonProperty("birth_day")]
+        [JsonPropertyName("birth_day")]
         public string BirthDay { get; set; }
 
-        [JsonProperty("birth_year")]
+        [JsonPropertyName("birth_year")]
         public string BirthYear { get; set; }
 
-        [JsonProperty("job")]
+        [JsonPropertyName("job")]
         public string Job { get; set; }
 
-        [JsonProperty("pawoo")]
+        [JsonPropertyName("pawoo")]
         public bool Pawoo { get; set; }
     }
 
     public partial class Workspace
     {
-        [JsonProperty("pc")]
+        [JsonPropertyName("pc")]
         public string Pc { get; set; }
 
-        [JsonProperty("monitor")]
+        [JsonPropertyName("monitor")]
         public string Monitor { get; set; }
 
-        [JsonProperty("tool")]
+        [JsonPropertyName("tool")]
         public string Tool { get; set; }
 
-        [JsonProperty("scanner")]
+        [JsonPropertyName("scanner")]
         public string Scanner { get; set; }
 
-        [JsonProperty("tablet")]
+        [JsonPropertyName("tablet")]
         public string Tablet { get; set; }
 
-        [JsonProperty("mouse")]
+        [JsonPropertyName("mouse")]
         public string Mouse { get; set; }
 
-        [JsonProperty("printer")]
+        [JsonPropertyName("printer")]
         public string Printer { get; set; }
 
-        [JsonProperty("desktop")]
+        [JsonPropertyName("desktop")]
         public string Desktop { get; set; }
 
-        [JsonProperty("music")]
+        [JsonPropertyName("music")]
         public string Music { get; set; }
 
-        [JsonProperty("desk")]
+        [JsonPropertyName("desk")]
         public string Desk { get; set; }
 
-        [JsonProperty("chair")]
+        [JsonPropertyName("chair")]
         public string Chair { get; set; }
 
-        [JsonProperty("comment")]
+        [JsonPropertyName("comment")]
         public string Comment { get; set; }
 
-        [JsonProperty("workspace_image_url")]
+        [JsonPropertyName("workspace_image_url")]
         public Uri WorkspaceImageUrl { get; set; }
     }
 
-    public partial class AuthResult
+    public partial class AuthResult : ResultBase
     {
-        [JsonProperty("response")]
+        [JsonPropertyName("response")]
         public Response Response { get; set; }
     }
 
     public partial class Response
     {
-        [JsonProperty("access_token")]
+        [JsonPropertyName("access_token")]
         public string AccessToken { get; set; }
 
-        [JsonProperty("expires_in")]
+        [JsonPropertyName("expires_in")]
         public long ExpiresIn { get; set; }
 
-        [JsonProperty("token_type")]
+        [JsonPropertyName("token_type")]
         public string TokenType { get; set; }
 
-        [JsonProperty("scope")]
+        [JsonPropertyName("scope")]
         public string Scope { get; set; }
 
-        [JsonProperty("refresh_token")]
+        [JsonPropertyName("refresh_token")]
         public string RefreshToken { get; set; }
 
-        [JsonProperty("user")]
+        [JsonPropertyName("user")]
         public ResponseUser User { get; set; }
 
-        [JsonProperty("device_token")]
+        [JsonPropertyName("device_token")]
         public string DeviceToken { get; set; }
     }
 
     public partial class ResponseUser
     {
-        [JsonProperty("profile_image_urls")]
+        [JsonPropertyName("profile_image_urls")]
         public ProfileImageUrls ProfileImageUrls { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("account")]
+        [JsonPropertyName("account")]
         public string Account { get; set; }
 
-        [JsonProperty("mail_address")]
+        [JsonPropertyName("mail_address")]
         public string MailAddress { get; set; }
 
-        [JsonProperty("is_premium")]
+        [JsonPropertyName("is_premium")]
         public bool IsPremium { get; set; }
 
-        [JsonProperty("x_restrict")]
+        [JsonPropertyName("x_restrict")]
         public long XRestrict { get; set; }
 
-        [JsonProperty("is_mail_authorized")]
+        [JsonPropertyName("is_mail_authorized")]
         public bool IsMailAuthorized { get; set; }
     }
 
     public partial class ProfileImageUrls
     {
-        [JsonProperty("px_16x16")]
+        [JsonPropertyName("px_16x16")]
         public Uri Px16X16 { get; set; }
 
-        [JsonProperty("px_50x50")]
+        [JsonPropertyName("px_50x50")]
         public Uri Px50X50 { get; set; }
 
-        [JsonProperty("px_170x170")]
+        [JsonPropertyName("px_170x170")]
         public Uri Px170X170 { get; set; }
     }
 
     public partial class ShowcaseArticle
     {
-        public static ShowcaseArticle FromJson(string json) => JsonConvert.DeserializeObject<ShowcaseArticle>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static ShowcaseArticle FromJson(string json) => JsonSerializer.Deserialize<ShowcaseArticle>(json);
     }
 
     public partial class UgoiraMetadata
     {
-        public static UgoiraMetadata FromJson(string json) => JsonConvert.DeserializeObject<UgoiraMetadata>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UgoiraMetadata FromJson(string json) => JsonSerializer.Deserialize<UgoiraMetadata>(json);
     }
 
     public partial class UserList
     {
-        public static UserList FromJson(string json) => JsonConvert.DeserializeObject<UserList>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserList FromJson(string json) => JsonSerializer.Deserialize<UserList>(json);
     }
 
     public partial class UserMyPixiv
     {
-        public static UserFollowList FromJson(string json) => JsonConvert.DeserializeObject<UserFollowList>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserFollowList FromJson(string json) => JsonSerializer.Deserialize<UserFollowList>(json);
     }
 
     public partial class UserFollower
     {
-        public static UserFollowList FromJson(string json) => JsonConvert.DeserializeObject<UserFollowList>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserFollowList FromJson(string json) => JsonSerializer.Deserialize<UserFollowList>(json);
     }
 
     public partial class UserFollowList
     {
-        public static UserFollowList FromJson(string json) => JsonConvert.DeserializeObject<UserFollowList>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserFollowList FromJson(string json) => JsonSerializer.Deserialize<UserFollowList>(json);
     }
 
     public partial class UserBookmarkTags
     {
-        public static UserBookmarkTags FromJson(string json) => JsonConvert.DeserializeObject<UserBookmarkTags>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserBookmarkTags FromJson(string json) => JsonSerializer.Deserialize<UserBookmarkTags>(json);
     }
 
     public partial class IllustBookmarkDetail
     {
-        public static IllustBookmarkDetail FromJson(string json) => JsonConvert.DeserializeObject<IllustBookmarkDetail>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static IllustBookmarkDetail FromJson(string json) => JsonSerializer.Deserialize<IllustBookmarkDetail>(json);
     }
 
     public partial class SearchIllustResult
     {
-        public static SearchIllustResult FromJson(string json) => JsonConvert.DeserializeObject<SearchIllustResult>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static SearchIllustResult FromJson(string json) => JsonSerializer.Deserialize<SearchIllustResult>(json);
     }
 
     public partial class TrendingTagsIllust
     {
-        public static TrendingTagsIllust FromJson(string json) => JsonConvert.DeserializeObject<TrendingTagsIllust>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static TrendingTagsIllust FromJson(string json) => JsonSerializer.Deserialize<TrendingTagsIllust>(json);
     }
 
     public partial class IllustRanking
     {
-        public static UserIllusts FromJson(string json) => JsonConvert.DeserializeObject<UserIllusts>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserIllusts FromJson(string json) => JsonSerializer.Deserialize<UserIllusts>(json);
     }
 
     public partial class IllustRecommended
     {
-        public static IllustRecommended FromJson(string json) => JsonConvert.DeserializeObject<IllustRecommended>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static IllustRecommended FromJson(string json) => JsonSerializer.Deserialize<IllustRecommended>(json);
     }
 
     public partial class IllustRelated
     {
-        public static UserIllusts FromJson(string json) => JsonConvert.DeserializeObject<UserIllusts>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserIllusts FromJson(string json) => JsonSerializer.Deserialize<UserIllusts>(json);
     }
 
     public partial class IllustCommentAddResult
     {
-        public static IllustCommentAddResult FromJson(string json) => JsonConvert.DeserializeObject<IllustCommentAddResult>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static IllustCommentAddResult FromJson(string json) => JsonSerializer.Deserialize<IllustCommentAddResult>(json);
     }
 
     public partial class IllustComments
     {
-        public static IllustComments FromJson(string json) => JsonConvert.DeserializeObject<IllustComments>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static IllustComments FromJson(string json) => JsonSerializer.Deserialize<IllustComments>(json);
     }
 
     public partial class IllustDetail
     {
-        public static IllustDetail FromJson(string json) => JsonConvert.DeserializeObject<IllustDetail>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static IllustDetail FromJson(string json) => JsonSerializer.Deserialize<IllustDetail>(json);
     }
 
     public partial class IllustFollow
     {
-        public static UserIllusts FromJson(string json) => JsonConvert.DeserializeObject<UserIllusts>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserIllusts FromJson(string json) => JsonSerializer.Deserialize<UserIllusts>(json);
     }
 
     public partial class UserBookmarksIllust
     {
-        public static UserIllusts FromJson(string json) => JsonConvert.DeserializeObject<UserIllusts>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserIllusts FromJson(string json) => JsonSerializer.Deserialize<UserIllusts>(json);
     }
 
     public partial class UserIllusts
     {
-        public static UserIllusts FromJson(string json) => JsonConvert.DeserializeObject<UserIllusts>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserIllusts FromJson(string json) => JsonSerializer.Deserialize<UserIllusts>(json);
     }
 
     public partial class UserDetail
     {
-        public static UserDetail FromJson(string json) => JsonConvert.DeserializeObject<UserDetail>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static UserDetail FromJson(string json) => JsonSerializer.Deserialize<UserDetail>(json);
     }
 
     public partial class AuthResult
     {
-        public static AuthResult FromJson(string json) => JsonConvert.DeserializeObject<AuthResult>(json, PixivCS.Objects.Converter.Settings);
+        [Obsolete]
+        public static AuthResult FromJson(string json) => JsonSerializer.Deserialize<AuthResult>(json);
     }
-
+    [Obsolete]
     public static class Serialize
     {
-        public static string ToJson(this ShowcaseArticle self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this UgoiraMetadata self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this UserList self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this UserFollowList self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this UserBookmarkTags self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this IllustBookmarkDetail self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this SearchIllustResult self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this TrendingTagsIllust self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this UserIllusts self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this IllustRecommended self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this IllustCommentAddResult self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this IllustComments self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this IllustDetail self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this UserDetail self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-        public static string ToJson(this AuthResult self) => JsonConvert.SerializeObject(self, PixivCS.Objects.Converter.Settings);
-    }
-
-    internal static class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
+        [Obsolete]
+        public static string ToJson(this ShowcaseArticle self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this UgoiraMetadata self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this UserList self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this UserFollowList self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this UserBookmarkTags self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this IllustBookmarkDetail self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this SearchIllustResult self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this TrendingTagsIllust self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this UserIllusts self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this IllustRecommended self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this IllustCommentAddResult self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this IllustComments self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this IllustDetail self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this UserDetail self) => JsonSerializer.Serialize(self);
+        [Obsolete]
+        public static string ToJson(this AuthResult self) => JsonSerializer.Serialize(self);
     }
 }

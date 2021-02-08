@@ -8,11 +8,18 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixivCS
+using PixivCS.Exceptions;
+
+namespace PixivCS.Utils
 {
     internal static class Utilities
     {
-        //不携带SNI的连接
+        /// <summary>
+        /// 不携带SNI的连接
+        /// </summary>
+        /// <param name="TargetIP"></param>
+        /// <param name="CertValidation"></param>
+        /// <returns></returns>
         public static async Task<SslStream> CreateConnectionAsync(string TargetIP, Func<X509Certificate2, bool> CertValidation)
         {
             TcpClient client = new TcpClient();
@@ -31,7 +38,14 @@ namespace PixivCS
             }
         }
 
-        //用于构造一个Http报文
+        /// <summary>
+        /// 用于构造一个Http报文
+        /// </summary>
+        /// <param name="Method"></param>
+        /// <param name="Url"></param>
+        /// <param name="Headers"></param>
+        /// <param name="Body"></param>
+        /// <returns></returns>
         public static async Task<byte[]> ConstructHTTPAsync(string Method, string Url,
             Dictionary<string, string> Headers, HttpContent Body)
         {
