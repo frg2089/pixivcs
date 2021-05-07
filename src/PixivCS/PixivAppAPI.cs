@@ -10,6 +10,7 @@ using PixivCS.Utils;
 
 namespace PixivCS
 {
+    [Obsolete("Use "+nameof(PixivApp) +" ")]
     public class PixivAppAPI : PixivBaseAPI
     {
         public PixivAppAPI(string AccessToken, string RefreshToken, string UserID,ClientOutput ClientLog, bool ExperimentalConnection = false) :

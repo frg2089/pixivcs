@@ -16,7 +16,7 @@ using PixivCS.Exceptions;
 
 namespace PixivCS
 {
-
+    [Obsolete]
     public class RefreshEventArgs : EventArgs
     {
         public string NewAccessToken { get; }
@@ -30,7 +30,7 @@ namespace PixivCS
             this.IsSuccessful = IsSuccessful;
         }
     }
-
+    [Obsolete("Use " + nameof(API.PixivAPIClient) + " ")]
     public class PixivBaseAPI
     {
         // 参考自下面的链接
@@ -297,7 +297,7 @@ namespace PixivCS
         /// <exception cref="PixivAuthException">用户名密码错误</exception>
         /// <exception cref="HttpRequestException">Http连接失败()</exception>
         [Obsolete("Use WebView&Code2Token method instead")]
-        public async Task<Objects.AuthResult> AuthAsync(string Username, string Password)
+        public async Task<Model.Result.AuthResult> AuthAsync(string Username, string Password)
         {
             string time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
             Dictionary<string, string> headers = new Dictionary<string, string>
@@ -328,7 +328,7 @@ namespace PixivCS
         /// <exception cref="PixivException">尚不明确的其他错误</exception>
         /// <exception cref="PixivAuthException">用户名密码错误</exception>
         /// <exception cref="HttpRequestException">Http连接失败()</exception>
-        public async Task<Objects.AuthResult> AuthAsync(string RefreshToken)
+        public async Task<Model.Result.AuthResult> AuthAsync(string RefreshToken)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>
             {
@@ -359,11 +359,11 @@ namespace PixivCS
         /// <exception cref="PixivException">尚不明确的其他错误</exception>
         /// <exception cref="PixivAuthException">用户名密码错误</exception>
         /// <exception cref="HttpRequestException">Http连接失败()</exception>
-        protected virtual async ValueTask<Objects.AuthResult> AuthAsync(Dictionary<string, string> headers, Dictionary<string, string> data)
+        protected virtual async ValueTask<Model.Result.AuthResult> AuthAsync(Dictionary<string, string> headers, Dictionary<string, string> data)
         {
             const string url = "https://oauth.secure.pixiv.net/auth/token";
             var res = await RequestCall("POST", url, headers, Body: new FormUrlEncodedContent(data)).ConfigureAwait(false);
-            var resJSON = await res.GetResult<Objects.AuthResult>().ConfigureAwait(false);
+            var resJSON = await res.GetResult<Model.Result.AuthResult>().ConfigureAwait(false);
             AccessToken = resJSON.Response.AccessToken;
             UserID = resJSON.Response.User.Id;
             RefreshToken = resJSON.Response.RefreshToken;
@@ -376,7 +376,15 @@ namespace PixivCS
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public async Task<Objects.AuthResult> Code2Token(string code)
+        [Obsolete("Use " + nameof(AuthByCodeAsync) + " Method")]
+        public Task<Model.Result.AuthResult> Code2Token(string code) => AuthByCodeAsync(code);
+
+        /// <summary>
+        ///  使用code完成最后的登录步骤
+        /// </summary>
+        /// <param name="code">使用WebView登录后返回的code</param>
+        /// <returns></returns>
+        public async Task<Model.Result.AuthResult> AuthByCodeAsync(string code)
         {
             AccessTime = DateTime.UtcNow;
             string time = AccessTime.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
