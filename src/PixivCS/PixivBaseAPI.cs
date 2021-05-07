@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using System.Security.Cryptography;
-using System.Timers;
-using PixivCS.Utils;
+
 using PixivCS.Exceptions;
+using PixivCS.Utils;
 
 namespace PixivCS
 {
@@ -45,7 +44,7 @@ namespace PixivCS
         //允许设置代理
         public static void SetProxy(IWebProxy Proxy)
         {
-            HttpClientHandler handler = new HttpClientHandler()
+            var handler = new HttpClientHandler()
             {
                 Proxy = Proxy
             };
@@ -53,10 +52,7 @@ namespace PixivCS
         }
 
         //清空代理
-        public static void ClearProxy()
-        {
-            _client = new HttpClient();
-        }
+        public static void ClearProxy() => _client = new HttpClient();
 
         internal string clientID = "MOBrBDS8blbauoSck0ZfDbtuzpyT";
         internal string clientSecret = "lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj";
@@ -131,7 +127,7 @@ namespace PixivCS
             Dictionary<string, string> Headers = null, List<(string, string)> Query = null,
             HttpContent Body = null)
         {
-            string queryUrl = Url + ((Query != null) ? GetQueryString(Query) : "");
+            var queryUrl = Url + ((Query != null) ? GetQueryString(Query) : "");
             if (ExperimentalConnection && TargetIPs.ContainsKey(new Uri(queryUrl).Host))
             {
                 #region 无  底  深  坑
@@ -156,7 +152,7 @@ namespace PixivCS
                         memory.Position = index;
                         byte[] result;
                         HttpStatusCode statusCode;
-                        Dictionary<string, string> headersDictionary = new Dictionary<string, string>();
+                        var headersDictionary = new Dictionary<string, string>();
                         foreach (var header in headers.Split(new[] { "\r\n" }, StringSplitOptions.None))
                         {
                             if (string.IsNullOrWhiteSpace(header))
@@ -175,7 +171,7 @@ namespace PixivCS
                         if (headersDictionary.ContainsKey("Content-Encoding") &&
                             headersDictionary["Content-Encoding"].Contains("gzip"))
                         {
-                            using (GZipStream decompressionStream = new GZipStream(memory, CompressionMode.Decompress))
+                            using (var decompressionStream = new GZipStream(memory, CompressionMode.Decompress))
                             using (var decompressedMemory = new MemoryStream())
                             {
                                 await decompressionStream.CopyToAsync(decompressedMemory);
@@ -195,13 +191,13 @@ namespace PixivCS
                             headersDictionary["Transfer-Encoding"].Contains("chunked"))
                         {
                             //处理分块传输
-                            using (MemoryStream parsedChunckedResult = new MemoryStream())
+                            using (var parsedChunckedResult = new MemoryStream())
                             {
                                 parsedChunckedResult.Position = 0;
-                                int position = 0;
-                                bool lengthOrContent = false;
-                                int chunkLength = 0;
-                                List<byte> lengthList = new List<byte>();
+                                var position = 0;
+                                var lengthOrContent = false;
+                                var chunkLength = 0;
+                                var lengthList = new List<byte>();
                                 while (position < result.Length)
                                 {
                                     if (!lengthOrContent)
@@ -235,8 +231,10 @@ namespace PixivCS
                                 result = parsedChunckedResult.ToArray();
                             }
                         }
-                        var res = new HttpResponseMessage();
-                        res.Content = new ByteArrayContent(result);
+                        var res = new HttpResponseMessage
+                        {
+                            Content = new ByteArrayContent(result)
+                        };
                         if (ClientLog != null)
                             await ClientLog(result);
                         foreach (var pair in headersDictionary)
@@ -258,8 +256,10 @@ namespace PixivCS
 
                 var request = new HttpRequestMessage(new HttpMethod(Method), queryUrl);
                 if (Headers != null)
+                {
                     foreach (var pair in Headers)
                         request.Headers.Add(pair.Key, pair.Value);
+                }
 
                 if (Body != null)
                     request.Content = Body;
@@ -281,8 +281,8 @@ namespace PixivCS
         public Uri GenerateWebViewUri()
         {
             CodeVerify = OAuthUtil.GenerateCodeVerify();
-            string codeChallenge = OAuthUtil.GenerateCodeChallenge(CodeVerify);
-            string uri = "https://app-api.pixiv.net/web/v1/login?code_challenge=" + codeChallenge + "&code_challenge_method=S256&client=pixiv-android";
+            var codeChallenge = OAuthUtil.GenerateCodeChallenge(CodeVerify);
+            var uri = "https://app-api.pixiv.net/web/v1/login?code_challenge=" + codeChallenge + "&code_challenge_method=S256&client=pixiv-android";
             return new Uri(uri);
         }
 
@@ -299,14 +299,14 @@ namespace PixivCS
         [Obsolete("Use WebView&Code2Token method instead")]
         public async Task<Model.Result.AuthResult> AuthAsync(string Username, string Password)
         {
-            string time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var time = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
+            var headers = new Dictionary<string, string>
             {
                 { "User-Agent", "PixivAndroidApp/5.0.64 (Android 6.0)" },
                 { "X-Client-Time", time },
                 { "X-Client-Hash", MD5Hash(time+hashSecret) }
             };
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var data = new Dictionary<string, string>
             {
                 { "get_secure_url", "1" },
                 { "client_id", clientID },
@@ -330,11 +330,11 @@ namespace PixivCS
         /// <exception cref="HttpRequestException">Http连接失败()</exception>
         public async Task<Model.Result.AuthResult> AuthAsync(string RefreshToken)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var headers = new Dictionary<string, string>
             {
                 { "User-Agent", "PixivAndroidApp/5.0.64 (Android 6.0)" }
             };
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var data = new Dictionary<string, string>
             {
                 { "get_secure_url", "1" },
                 { "client_id", clientID },
@@ -387,8 +387,8 @@ namespace PixivCS
         public async Task<Model.Result.AuthResult> AuthByCodeAsync(string code)
         {
             AccessTime = DateTime.UtcNow;
-            string time = AccessTime.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var time = AccessTime.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
+            var headers = new Dictionary<string, string>
             {
                 { "X-Client-Time", time},
                 { "X-Client-Hash", MD5Hash(time + hashSecret)},
@@ -400,7 +400,7 @@ namespace PixivCS
                 { "Content-Type", "application/x-www-form-urlencoded"},
                 { "Accept-Language","zh-CN"}
             };
-            Dictionary<string, string> body = new Dictionary<string, string>
+            var body = new Dictionary<string, string>
             {
                 { "client_id", clientID },
                 { "client_secret", clientSecret },
@@ -429,8 +429,8 @@ namespace PixivCS
             using (var md5 = MD5.Create())
             {
                 var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(Input.Trim()));
-                StringBuilder builder = new StringBuilder(bytes.Length << 1);
-                for (int i = 0; i < bytes.Length; i++)
+                var builder = new StringBuilder(bytes.Length << 1);
+                for (var i = 0; i < bytes.Length; i++)
                     builder.Append(bytes[i].ToString("x2"));
                 return builder.ToString();
             }

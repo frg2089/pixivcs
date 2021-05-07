@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -25,8 +23,8 @@ namespace PixivCS.Utils
             {
                 var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(Input.Trim()));
 
-                StringBuilder builder = new StringBuilder(bytes.Length << 1);
-                for (int i = 0; i < bytes.Length; i++)
+                var builder = new StringBuilder(bytes.Length << 1);
+                for (var i = 0; i < bytes.Length; i++)
                     builder.Append(bytes[i].ToString("x2"));
                 return builder.ToString();
             }

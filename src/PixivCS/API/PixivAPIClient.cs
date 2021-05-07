@@ -81,10 +81,7 @@ namespace PixivCS.API
         /// <summary>
         /// 清除Client代理
         /// </summary>
-        public static void ClearProxy()
-        {
-            _client = new HttpClient();
-        }
+        public static void ClearProxy() => _client = new HttpClient();
 
         /// <summary>
         /// 为Client设置代理
@@ -92,7 +89,7 @@ namespace PixivCS.API
         /// <param name="Proxy"></param>
         public static void SetProxy(IWebProxy Proxy)
         {
-            HttpClientHandler handler = new HttpClientHandler
+            var handler = new HttpClientHandler
             {
                 Proxy = Proxy
             };
@@ -115,7 +112,7 @@ namespace PixivCS.API
                     List<(string, string)> Query = null,
                     HttpContent Body = null)
         {
-            string queryUrl = Url;
+            var queryUrl = Url;
             if (Query?.Count > 0)
                 queryUrl += GetQueryString(Query);
 
@@ -144,8 +141,10 @@ namespace PixivCS.API
 
             var request = new HttpRequestMessage(new HttpMethod(Method), queryUrl);
             if (Headers != null)
+            {
                 foreach (var pair in Headers)
                     request.Headers.Add(pair.Key, pair.Value);
+            }
 
             if (Body != null)
                 request.Content = Body;
@@ -192,7 +191,7 @@ namespace PixivCS.API
                     memory.Position = index;
                     byte[] result;
                     HttpStatusCode statusCode;
-                    Dictionary<string, string> headersDictionary = new Dictionary<string, string>();
+                    var headersDictionary = new Dictionary<string, string>();
                     foreach (var header in headers.Split(new[] { "\r\n" }, StringSplitOptions.None))
                     {
                         if (string.IsNullOrWhiteSpace(header))
@@ -211,7 +210,7 @@ namespace PixivCS.API
                     if (headersDictionary.ContainsKey("Content-Encoding") &&
                         headersDictionary["Content-Encoding"].Contains("gzip"))
                     {
-                        using (GZipStream decompressionStream = new GZipStream(memory, CompressionMode.Decompress))
+                        using (var decompressionStream = new GZipStream(memory, CompressionMode.Decompress))
                         using (var decompressedMemory = new MemoryStream())
                         {
                             await decompressionStream.CopyToAsync(decompressedMemory);
@@ -231,13 +230,13 @@ namespace PixivCS.API
                         headersDictionary["Transfer-Encoding"].Contains("chunked"))
                     {
                         //处理分块传输
-                        using (MemoryStream parsedChunckedResult = new MemoryStream())
+                        using (var parsedChunckedResult = new MemoryStream())
                         {
                             parsedChunckedResult.Position = 0;
-                            int position = 0;
-                            bool lengthOrContent = false;
-                            int chunkLength = 0;
-                            List<byte> lengthList = new List<byte>();
+                            var position = 0;
+                            var lengthOrContent = false;
+                            var chunkLength = 0;
+                            var lengthList = new List<byte>();
                             while (position < result.Length)
                             {
                                 if (!lengthOrContent)
@@ -271,8 +270,10 @@ namespace PixivCS.API
                             result = parsedChunckedResult.ToArray();
                         }
                     }
-                    var res = new HttpResponseMessage();
-                    res.Content = new ByteArrayContent(result);
+                    var res = new HttpResponseMessage
+                    {
+                        Content = new ByteArrayContent(result)
+                    };
                     if (ClientLog != null)
                         await ClientLog(result);
                     foreach (var pair in headersDictionary)

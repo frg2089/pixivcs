@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -10,10 +8,10 @@ using PixivCS.Utils;
 
 namespace PixivCS
 {
-    [Obsolete("Use "+nameof(PixivApp) +" ")]
+    [Obsolete("Use " + nameof(PixivApp) + " ")]
     public class PixivAppAPI : PixivBaseAPI
     {
-        public PixivAppAPI(string AccessToken, string RefreshToken, string UserID,ClientOutput ClientLog, bool ExperimentalConnection = false) :
+        public PixivAppAPI(string AccessToken, string RefreshToken, string UserID, ClientOutput ClientLog, bool ExperimentalConnection = false) :
             base(AccessToken, RefreshToken, UserID, ClientLog, ExperimentalConnection)
         { }
 
@@ -33,7 +31,8 @@ namespace PixivCS
                 headers.Add("App-Version", "5.0.166");
                 headers.Add("User-Agent", "PixivAndroidApp/5.0.155 (Android 6.0; Pixel C)");
             }
-            if (RequireAuth) headers.Add("Authorization", string.Format("Bearer {0}", AccessToken));
+            if (RequireAuth)
+                headers.Add("Authorization", string.Format("Bearer {0}", AccessToken));
             return await base.RequestCall(Method, Url, headers, Query, Body);
         }
 
@@ -51,8 +50,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/detail";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/detail";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("filter", Filter)
@@ -77,14 +76,16 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/illusts";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/illusts";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("filter", Filter)
             };
-            if (!string.IsNullOrEmpty(IllustType)) query.Add(("type", IllustType));
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(IllustType))
+                query.Add(("type", IllustType));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserIllusts>();
         }
@@ -107,15 +108,17 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/bookmarks/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/bookmarks/illust";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("restrict", Restrict),
                 ("filter", Filter)
             };
-            if (!string.IsNullOrEmpty(MaxBookmarkID)) query.Add(("max_bookmark_id", MaxBookmarkID));
-            if (!string.IsNullOrEmpty(Tag)) query.Add(("tag", Tag));
+            if (!string.IsNullOrEmpty(MaxBookmarkID))
+                query.Add(("max_bookmark_id", MaxBookmarkID));
+            if (!string.IsNullOrEmpty(Tag))
+                query.Add(("tag", Tag));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserIllusts>();
         }
@@ -134,12 +137,13 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v2/illust/follow";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/illust/follow";
+            var query = new List<(string, string)>
             {
                 ("restrict", Restrict)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserIllusts>();
         }
@@ -156,8 +160,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/illust/detail";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/illust/detail";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
@@ -180,14 +184,19 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/illust/comments";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/illust/comments";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
-            if (IncludeTotalComments != null) query.Add(("include_total_comments",
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
+            if (IncludeTotalComments != null)
+            {
+                query.Add(("include_total_comments",
                 IncludeTotalComments.Value ? "true" : "false"));
+            }
+
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.IllustComments>();
         }
@@ -207,8 +216,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/illust/comment/add";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/illust/comment/add";
+            var data = new Dictionary<string, string>
             {
                 { "illust_id", IllustID },
                 { "comment", Comment }
@@ -235,8 +244,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v2/illust/related";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/illust/related";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID),
                 ("filter", Filter)
@@ -275,9 +284,9 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = RequireAuth ? "https://app-api.pixiv.net/v1/illust/recommended" :
+            var url = RequireAuth ? "https://app-api.pixiv.net/v1/illust/recommended" :
                 "https://app-api.pixiv.net/v1/illust/recommended-nologin";
-            List<(string, string)> query = new List<(string, string)>
+            var query = new List<(string, string)>
             {
                 ("content_type", ContentType),
                 ("include_ranking_label", IncludeRankingLabel ? "true" : "false"),
@@ -287,13 +296,17 @@ namespace PixivCS
                 query.Add(("max_bookmark_id_for_recommend", MaxBookmarkIDForRecommended));
             if (!string.IsNullOrEmpty(MinBookmarkIDForRecentIllust))
                 query.Add(("min_bookmark_id_for_recent_illust", MinBookmarkIDForRecentIllust));
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             if (IncludeRankingIllusts != null)
                 query.Add(("include_ranking_illusts", IncludeRankingIllusts.Value ? "true" : "false"));
-            string ids = "";
+            var ids = "";
             if (BookmarkIllustIDs != null)
+            {
                 foreach (var i in BookmarkIllustIDs)
                     ids += (i + ",");
+            }
+
             if (ids != "")
             {
                 ids.TrimEnd(',');
@@ -321,14 +334,16 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/illust/ranking";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/illust/ranking";
+            var query = new List<(string, string)>
             {
                 ("mode", Mode),
                 ("filter", Filter)
             };
-            if (!string.IsNullOrEmpty(Date)) query.Add(("date", Date));
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Date))
+                query.Add(("date", Date));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserIllusts>();
         }
@@ -340,8 +355,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/trending-tags/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/trending-tags/illust";
+            var query = new List<(string, string)>
             {
                 ("filter", Filter)
             };
@@ -373,16 +388,18 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/search/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/search/illust";
+            var query = new List<(string, string)>
             {
                 ("word", Word),
                 ("search_target", SearchTarget),
                 ("sort", Sort),
                 ("filter", Filter)
             };
-            if (!string.IsNullOrEmpty(Duration)) query.Add(("duration", Duration));
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Duration))
+                query.Add(("duration", Duration));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.SearchIllustResult>();
         }
@@ -399,8 +416,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v2/illust/bookmark/detail";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/illust/bookmark/detail";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
@@ -423,16 +440,19 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v2/illust/bookmark/add";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v2/illust/bookmark/add";
+            var data = new Dictionary<string, string>
             {
                 { "illust_id", IllustID },
                 { "restrict", Restrict }
             };
-            string tags = "";
+            var tags = "";
             if (Tags != null)
+            {
                 foreach (var i in Tags)
                     tags += (i + " ");
+            }
+
             tags = tags.Trim();
             if (tags != "")
                 data.Add("tags", HttpUtility.UrlEncode(tags));
@@ -452,8 +472,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/illust/bookmark/delete";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/illust/bookmark/delete";
+            var data = new Dictionary<string, string>
             {
                 { "illust_id", IllustID }
             };
@@ -475,12 +495,13 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/bookmark-tags/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/bookmark-tags/illust";
+            var query = new List<(string, string)>
             {
                 ("restrict", Restrict)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserBookmarkTags>();
         }
@@ -500,13 +521,14 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/following";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/following";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("restrict", Restrict)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserFollowList>();
         }
@@ -526,13 +548,14 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/follower";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/follower";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("restrict", Restrict)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserFollowList>();
         }
@@ -551,8 +574,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/follow/add";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/user/follow/add";
+            var data = new Dictionary<string, string>
             {
                 { "user_id", UserID },
                 { "restrict", Restrict }
@@ -575,8 +598,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/follow/delete";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/user/follow/delete";
+            var data = new Dictionary<string, string>
             {
                 { "user_id", UserID },
                 { "restrict", Restrict }
@@ -599,12 +622,13 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/user/mypixiv";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/mypixiv";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserFollowList>();
         }
@@ -624,13 +648,14 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v2/user/list";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/user/list";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("filter", Filter)
             };
-            if (!string.IsNullOrEmpty(Offset)) query.Add(("offset", Offset));
+            if (!string.IsNullOrEmpty(Offset))
+                query.Add(("offset", Offset));
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Objects.UserList>();
         }
@@ -647,8 +672,8 @@ namespace PixivCS
             {
                 await AuthAsync(RefreshToken);
             }
-            string url = "https://app-api.pixiv.net/v1/ugoira/metadata";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/ugoira/metadata";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
@@ -666,13 +691,13 @@ namespace PixivCS
         /// <returns></returns>
         public async Task<Objects.ShowcaseArticle> GetShowcaseArticleAsync(string ShowcaseID)
         {
-            string url = "https://www.pixiv.net/ajax/showcase/article";
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var url = "https://www.pixiv.net/ajax/showcase/article";
+            var headers = new Dictionary<string, string>
             {
                 { "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36" },
                 { "Referer", "https://www.pixiv.net" }
             };
-            List<(string, string)> query = new List<(string, string)>()
+            var query = new List<(string, string)>()
             {
                 ("article_id", ShowcaseID)
             };

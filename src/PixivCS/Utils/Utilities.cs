@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -22,7 +21,7 @@ namespace PixivCS.Utils
         /// <returns></returns>
         public static async Task<SslStream> CreateConnectionAsync(string TargetIP, Func<X509Certificate2, bool> CertValidation)
         {
-            TcpClient client = new TcpClient();
+            var client = new TcpClient();
             await client.ConnectAsync(TargetIP, 443);
             var networkStream = client.GetStream();
             var sslStream = new SslStream(networkStream, false, (sender, certificate, chain, errors) => CertValidation((X509Certificate2)certificate));
@@ -49,7 +48,7 @@ namespace PixivCS.Utils
         public static async Task<byte[]> ConstructHTTPAsync(string Method, string Url,
             Dictionary<string, string> Headers, HttpContent Body)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             switch (Method.ToUpper())
             {
                 case "GET":
@@ -65,7 +64,7 @@ namespace PixivCS.Utils
                     builder.AppendLine();
                     break;
                 case "POST":
-                    string bodyStr = "";
+                    var bodyStr = "";
                     builder.AppendLine(string.Format("POST {0} HTTP/1.1", Url));
                     foreach (var pair in Headers)
                         builder.AppendLine(string.Format("{0}: {1}", pair.Key, pair.Value));
@@ -98,11 +97,11 @@ namespace PixivCS.Utils
 
         public static int BinaryMatch(byte[] input, byte[] pattern)
         {
-            int sLen = input.Length - pattern.Length + 1;
-            for (int i = 0; i < sLen; ++i)
+            var sLen = input.Length - pattern.Length + 1;
+            for (var i = 0; i < sLen; ++i)
             {
-                bool match = true;
-                for (int j = 0; j < pattern.Length; ++j)
+                var match = true;
+                for (var j = 0; j < pattern.Length; ++j)
                 {
                     if (input[i + j] != pattern[j])
                     {

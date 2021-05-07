@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-using PixivCS.Utils;
 using PixivCS.API;
+using PixivCS.Utils;
 
 namespace PixivCS
 {
@@ -32,8 +30,8 @@ namespace PixivCS
         public async Task<Model.Result.IllustBookmarkDetailResult> GetIllustBookmarkDetailAsync(string IllustID, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v2/illust/bookmark/detail";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/illust/bookmark/detail";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
@@ -53,16 +51,19 @@ namespace PixivCS
             bool? IncludeTotalComments = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/illust/comments";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/illust/comments";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
             if (!string.IsNullOrEmpty(Offset))
                 query.Add(("offset", Offset));
             if (IncludeTotalComments != null)
+            {
                 query.Add(("include_total_comments",
 IncludeTotalComments.Value ? "true" : "false"));
+            }
+
             var res = await RequestCall("GET", url, Query: query, RequireAuth: RequireAuth);
             return await res.GetResult<Model.Result.IllustCommentsResult>();
         }
@@ -76,8 +77,8 @@ IncludeTotalComments.Value ? "true" : "false"));
         public async Task<Model.Result.IllustDetailResult> GetIllustDetailAsync(string IllustID, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/illust/detail";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/illust/detail";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
@@ -96,8 +97,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v2/illust/follow";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/illust/follow";
+            var query = new List<(string, string)>
             {
                 ("restrict", Restrict)
             };
@@ -120,8 +121,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             string Date = null, string Offset = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/illust/ranking";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/illust/ranking";
+            var query = new List<(string, string)>
             {
                 ("mode", Mode),
                 ("filter", Filter)
@@ -156,9 +157,9 @@ IncludeTotalComments.Value ? "true" : "false"));
             string IncludePrivacyPolicy = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = RequireAuth ? "https://app-api.pixiv.net/v1/illust/recommended" :
+            var url = RequireAuth ? "https://app-api.pixiv.net/v1/illust/recommended" :
                 "https://app-api.pixiv.net/v1/illust/recommended-nologin";
-            List<(string, string)> query = new List<(string, string)>
+            var query = new List<(string, string)>
             {
                 ("content_type", ContentType),
                 ("include_ranking_label", IncludeRankingLabel ? "true" : "false"),
@@ -172,10 +173,13 @@ IncludeTotalComments.Value ? "true" : "false"));
                 query.Add(("offset", Offset));
             if (IncludeRankingIllusts != null)
                 query.Add(("include_ranking_illusts", IncludeRankingIllusts.Value ? "true" : "false"));
-            string ids = "";
+            var ids = "";
             if (BookmarkIllustIDs != null)
+            {
                 foreach (var i in BookmarkIllustIDs)
                     ids += (i + ",");
+            }
+
             if (ids != "")
             {
                 ids.TrimEnd(',');
@@ -199,8 +203,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             List<string> SeedIllustIDs = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v2/illust/related";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/illust/related";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID),
                 ("filter", Filter)
@@ -235,8 +239,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/search/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/search/illust";
+            var query = new List<(string, string)>
             {
                 ("word", Word),
                 ("search_target", SearchTarget),
@@ -261,13 +265,13 @@ IncludeTotalComments.Value ? "true" : "false"));
         /// <returns></returns>
         public async Task<Model.Result.ShowcaseArticleResult> GetShowcaseArticleAsync(string ShowcaseID)
         {
-            string url = "https://www.pixiv.net/ajax/showcase/article";
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var url = "https://www.pixiv.net/ajax/showcase/article";
+            var headers = new Dictionary<string, string>
             {
                 { "User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36" },
                 { "Referer", "https://www.pixiv.net" }
             };
-            List<(string, string)> query = new List<(string, string)>()
+            var query = new List<(string, string)>()
             {
                 ("article_id", ShowcaseID)
             };
@@ -284,8 +288,8 @@ IncludeTotalComments.Value ? "true" : "false"));
         public async Task<Model.Result.TrendingTagsIllustResult> GetTrendingTagsIllustAsync(string Filter = "for_android", bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/trending-tags/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/trending-tags/illust";
+            var query = new List<(string, string)>
             {
                 ("filter", Filter)
             };
@@ -302,8 +306,8 @@ IncludeTotalComments.Value ? "true" : "false"));
         public async Task<Model.Result.UgoiraMetadataResult> GetUgoiraMetadataAsync(string IllustID, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/ugoira/metadata";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/ugoira/metadata";
+            var query = new List<(string, string)>
             {
                 ("illust_id", IllustID)
             };
@@ -326,8 +330,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/bookmarks/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/bookmarks/illust";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("restrict", Restrict),
@@ -352,8 +356,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/bookmark-tags/illust";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/bookmark-tags/illust";
+            var query = new List<(string, string)>
             {
                 ("restrict", Restrict)
             };
@@ -374,8 +378,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/detail";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/detail";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("filter", Filter)
@@ -396,8 +400,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             string Offset = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/follower";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/follower";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("restrict", Restrict)
@@ -420,8 +424,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             string Offset = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/following";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/following";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("restrict", Restrict)
@@ -445,8 +449,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             string Filter = "for_ios", string Offset = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/illusts";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/illusts";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("filter", Filter)
@@ -471,8 +475,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             string Offset = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v2/user/list";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v2/user/list";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID),
                 ("filter", Filter)
@@ -494,8 +498,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/mypixiv";
-            List<(string, string)> query = new List<(string, string)>
+            var url = "https://app-api.pixiv.net/v1/user/mypixiv";
+            var query = new List<(string, string)>
             {
                 ("user_id", UserID)
             };
@@ -517,16 +521,19 @@ IncludeTotalComments.Value ? "true" : "false"));
             List<string> Tags = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v2/illust/bookmark/add";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v2/illust/bookmark/add";
+            var data = new Dictionary<string, string>
             {
                 { "illust_id", IllustID },
                 { "restrict", Restrict }
             };
-            string tags = "";
+            var tags = "";
             if (Tags != null)
+            {
                 foreach (var i in Tags)
                     tags += (i + " ");
+            }
+
             tags = tags.Trim();
             if (tags != "")
                 data.Add("tags", HttpUtility.UrlEncode(tags));
@@ -543,8 +550,8 @@ IncludeTotalComments.Value ? "true" : "false"));
         public async Task PostIllustBookmarkDeleteAsync(string IllustID, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/illust/bookmark/delete";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/illust/bookmark/delete";
+            var data = new Dictionary<string, string>
             {
                 { "illust_id", IllustID }
             };
@@ -564,8 +571,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             string ParentCommentID = null, bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/illust/comment/add";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/illust/comment/add";
+            var data = new Dictionary<string, string>
             {
                 { "illust_id", IllustID },
                 { "comment", Comment }
@@ -588,8 +595,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/follow/add";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/user/follow/add";
+            var data = new Dictionary<string, string>
             {
                 { "user_id", UserID },
                 { "restrict", Restrict }
@@ -609,8 +616,8 @@ IncludeTotalComments.Value ? "true" : "false"));
             bool RequireAuth = true)
         {
             await AuthCheck(RequireAuth);
-            string url = "https://app-api.pixiv.net/v1/user/follow/delete";
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var url = "https://app-api.pixiv.net/v1/user/follow/delete";
+            var data = new Dictionary<string, string>
             {
                 { "user_id", UserID },
                 { "restrict", Restrict }

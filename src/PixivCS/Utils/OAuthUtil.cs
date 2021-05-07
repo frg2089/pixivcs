@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
-using System.Net.Http;
-using System.Text.Json;
+using System.Text;
 
 namespace PixivCS.Utils
 {
     internal static class OAuthUtil
     {
         private static readonly char[] padding = { '=' };
-        
+
         public static string GenerateCodeVerify()
         {
-            byte[] byteArray = new byte[32];
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+            var byteArray = new byte[32];
+            var provider = new RNGCryptoServiceProvider();
             provider.GetBytes(byteArray);
             return Convert.ToBase64String(byteArray).TrimEnd(padding).Replace('+', '-').Replace('/', '_');
         }
@@ -24,7 +20,7 @@ namespace PixivCS.Utils
         {
             var toByteArray = Encoding.ASCII.GetBytes(code);
             byte[] hashValue = null;
-            using (SHA256 mySHA256 = SHA256.Create())
+            using (var mySHA256 = SHA256.Create())
             {
                 try
                 {

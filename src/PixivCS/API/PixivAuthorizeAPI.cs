@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Security.Cryptography;
-using System.Timers;
 
-using PixivCS.Utils;
 using PixivCS.Exceptions;
+using PixivCS.Utils;
 
 
 namespace PixivCS.API
@@ -53,8 +44,8 @@ namespace PixivCS.API
         public virtual async Task<Model.Result.AuthResult> AuthByCodeAsync(string code)
         {
             AccessTime = DateTime.UtcNow;
-            string time = AccessTime.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var time = AccessTime.ToString("yyyy-MM-ddTHH:mm:ss+00:00");
+            var headers = new Dictionary<string, string>
             {
                 { "X-Client-Time", time},
                 { "X-Client-Hash", MD5Util.MD5Hash(time + HashSecret)},
@@ -66,7 +57,7 @@ namespace PixivCS.API
                 { "Content-Type", "application/x-www-form-urlencoded"},
                 { "Accept-Language","zh-CN"}
             };
-            Dictionary<string, string> body = new Dictionary<string, string>
+            var body = new Dictionary<string, string>
             {
                 { "client_id", ClientID },
                 { "client_secret", ClientSecret },
@@ -92,11 +83,11 @@ namespace PixivCS.API
         public virtual async Task<Model.Result.AuthResult> AuthByRefreshTokenAsync(string RefreshToken)
         {
             AccessTime = DateTime.UtcNow;
-            Dictionary<string, string> headers = new Dictionary<string, string>
+            var headers = new Dictionary<string, string>
             {
                 { "User-Agent", "PixivAndroidApp/5.0.64 (Android 6.0)" }
             };
-            Dictionary<string, string> data = new Dictionary<string, string>
+            var data = new Dictionary<string, string>
             {
                 { "get_secure_url", "1" },
                 { "client_id", ClientID },
@@ -114,8 +105,8 @@ namespace PixivCS.API
         public virtual Uri GenerateWebViewUri()
         {
             _codeVerify = OAuthUtil.GenerateCodeVerify();
-            string codeChallenge = OAuthUtil.GenerateCodeChallenge(_codeVerify);
-            string uri = "https://app-api.pixiv.net/web/v1/login?code_challenge=" + codeChallenge + "&code_challenge_method=S256&client=pixiv-android";
+            var codeChallenge = OAuthUtil.GenerateCodeChallenge(_codeVerify);
+            var uri = "https://app-api.pixiv.net/web/v1/login?code_challenge=" + codeChallenge + "&code_challenge_method=S256&client=pixiv-android";
             return new Uri(uri);
         }
 

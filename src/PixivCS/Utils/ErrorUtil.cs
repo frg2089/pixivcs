@@ -41,7 +41,7 @@ namespace PixivCS.Utils
         }
         public static void HttpStatusValidator(this HttpResponseMessage response)
         {
-            int status = (int)response.StatusCode;
+            var status = (int)response.StatusCode;
             if (status != 200 && status != 301 && status != 302)
                 throw new HttpRequestException($"[ERROR] Http:{status} {response.StatusCode}");
         }
