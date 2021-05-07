@@ -113,13 +113,9 @@ namespace PixivCS
 
         //用于生成带参数的url
         private static string GetQueryString(List<(string, string)> query)
-        {
-            var array = (from i in query
-                         select string.Format("{0}={1}", HttpUtility.UrlEncode(i.Item1),
-                         HttpUtility.UrlEncode(i.Item2)))
-                .ToArray();
-            return "?" + string.Join("&", array);
-        }
+            => "?" + string.Join("&", query.Select(i => $"{HttpUtility.UrlEncode(i.Item1)}={HttpUtility.UrlEncode(i.Item2)}"));
+        private static string GetQueryString(Dictionary<string, string> query)
+            => "?" + string.Join("&", query.Select(i => $"{HttpUtility.UrlEncode(i.Key)}={HttpUtility.UrlEncode(i.Value)}"));
 
         /// <summary>
         /// 登录验证
@@ -147,7 +143,7 @@ namespace PixivCS
                     cert.Subject == targetSubject && cert.SerialNumber == targetSN && cert.Thumbprint == targetTP))
                 {
                     var httpRequest = await Utilities.ConstructHTTPAsync(Method, queryUrl, Headers, Body);
-                    if(ClientLog != null) 
+                    if (ClientLog != null)
                         await ClientLog(httpRequest);
                     await connection.WriteAsync(httpRequest, 0, httpRequest.Length);
                     using (var memory = new MemoryStream())
