@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixivCS", "PixivCS.csproj", "{FE779F07-B97A-41E1-BBC6-731C2EB24E72}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "..\UnitTestProject1\UnitTestProject1.csproj", "{9710C3CC-A41D-4365-B353-DEBEDA71862D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixivCS", "src\PixivCS\PixivCS.csproj", "{FE779F07-B97A-41E1-BBC6-731C2EB24E72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
