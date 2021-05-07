@@ -7,9 +7,12 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using PixivCS.Model.Result;
+
 namespace PixivCS.Objects
 {
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class ShowcaseArticle : ResultBase
     {
         [JsonPropertyName("message")]
@@ -19,6 +22,7 @@ namespace PixivCS.Objects
         public Body[] Body { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Body
     {
         [JsonPropertyName("id")]
@@ -73,6 +77,7 @@ namespace PixivCS.Objects
         public bool IsOnlyOneUser { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Entry
     {
         [JsonPropertyName("id")]
@@ -133,6 +138,7 @@ namespace PixivCS.Objects
         public string TwitterCount { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class PixivisionCategory
     {
         [JsonPropertyName("label")]
@@ -142,6 +148,7 @@ namespace PixivCS.Objects
         public string Introduction { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class PixivisionSubcategory
     {
         [JsonPropertyName("label")]
@@ -163,6 +170,7 @@ namespace PixivCS.Objects
         public string BigImageUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class EntryTag
     {
         [JsonPropertyName("id")]
@@ -172,6 +180,7 @@ namespace PixivCS.Objects
         public string Name { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class BodyIllust
     {
         [JsonPropertyName("spotlight_article_id")]
@@ -256,6 +265,7 @@ namespace PixivCS.Objects
         public Uri UserIcon { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Url
     {
         [JsonPropertyName("1200x1200")]
@@ -271,6 +281,7 @@ namespace PixivCS.Objects
         public string Ugoira1920X1080 { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class RelatedArticle
     {
         [JsonPropertyName("id")]
@@ -358,16 +369,19 @@ namespace PixivCS.Objects
         public string AdvertisementId { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class PrivacyPolicy
     {
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UgoiraMetadata : ResultBase
     {
         [JsonPropertyName("ugoira_metadata")]
         public UgoiraMetadataClass UgoiraMetadataUgoiraMetadata { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UgoiraMetadataClass
     {
         [JsonPropertyName("zip_urls")]
@@ -377,6 +391,7 @@ namespace PixivCS.Objects
         public Frame[] Frames { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Frame
     {
         [JsonPropertyName("file")]
@@ -386,18 +401,21 @@ namespace PixivCS.Objects
         public long Delay { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Urls
     {
         [JsonPropertyName("medium")]
         public Uri Medium { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserList : ResultBase
     {
         [JsonPropertyName("users")]
         public dynamic[] Users { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserFollowList : ResultBase
     {
         [JsonPropertyName("user_previews")]
@@ -407,6 +425,7 @@ namespace PixivCS.Objects
         public Uri NextUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserPreview
     {
         [JsonPropertyName("user")]
@@ -422,6 +441,7 @@ namespace PixivCS.Objects
         public bool IsMuted { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserPreviewIllust
     {
         [JsonPropertyName("id")]
@@ -497,6 +517,7 @@ namespace PixivCS.Objects
         public long? TotalComments { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class ImageUrls
     {
         [JsonPropertyName("square_medium")]
@@ -512,18 +533,21 @@ namespace PixivCS.Objects
         public Uri Original { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class MetaPage
     {
         [JsonPropertyName("image_urls")]
         public ImageUrls ImageUrls { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class MetaSinglePage
     {
         [JsonPropertyName("original_image_url")]
         public Uri OriginalImageUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Series
     {
         [JsonPropertyName("id")]
@@ -533,6 +557,7 @@ namespace PixivCS.Objects
         public string Title { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustTag
     {
         [JsonPropertyName("name")]
@@ -542,6 +567,7 @@ namespace PixivCS.Objects
         public string TranslatedName { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustUser
     {
         [JsonPropertyName("id")]
@@ -563,6 +589,7 @@ namespace PixivCS.Objects
         public string Comment { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserBookmarkTags : ResultBase
     {
         [JsonPropertyName("bookmark_tags")]
@@ -572,12 +599,14 @@ namespace PixivCS.Objects
         public Uri NextUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustBookmarkDetail : ResultBase
     {
         [JsonPropertyName("bookmark_detail")]
         public BookmarkDetail BookmarkDetail { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class BookmarkDetail
     {
         [JsonPropertyName("is_bookmarked")]
@@ -590,6 +619,7 @@ namespace PixivCS.Objects
         public string Restrict { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class BookmarkDetailTag
     {
         [JsonPropertyName("name")]
@@ -599,6 +629,7 @@ namespace PixivCS.Objects
         public bool IsRegistered { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class SearchIllustResult : ResultBase
     {
         [JsonPropertyName("illusts")]
@@ -611,12 +642,14 @@ namespace PixivCS.Objects
         public long SearchSpanLimit { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class TrendingTagsIllust : ResultBase
     {
         [JsonPropertyName("trend_tags")]
         public TrendTag[] TrendTags { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class TrendTag
     {
         [JsonPropertyName("tag")]
@@ -629,6 +662,7 @@ namespace PixivCS.Objects
         public UserPreviewIllust Illust { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserIllusts : ResultBase
     {
         [JsonPropertyName("illusts")]
@@ -638,6 +672,7 @@ namespace PixivCS.Objects
         public Uri NextUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustRecommended : ResultBase
     {
         [JsonPropertyName("illusts")]
@@ -656,12 +691,14 @@ namespace PixivCS.Objects
         public Uri NextUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustCommentAddResult : ResultBase
     {
         [JsonPropertyName("comment")]
         public Comment Comment { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Comment
     {
         [JsonPropertyName("id")]
@@ -683,6 +720,7 @@ namespace PixivCS.Objects
         public Comment ParentComment { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustComments : ResultBase
     {
         [JsonPropertyName("total_comments")]
@@ -695,12 +733,14 @@ namespace PixivCS.Objects
         public Uri NextUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class IllustDetail : ResultBase
     {
         [JsonPropertyName("illust")]
         public UserPreviewIllust Illust { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class UserDetail : ResultBase
     {
         [JsonPropertyName("user")]
@@ -716,6 +756,7 @@ namespace PixivCS.Objects
         public Workspace Workspace { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Profile
     {
         [JsonPropertyName("webpage")]
@@ -791,6 +832,7 @@ namespace PixivCS.Objects
         public bool IsUsingCustomProfileImage { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class ProfilePublicity
     {
         [JsonPropertyName("gender")]
@@ -812,6 +854,7 @@ namespace PixivCS.Objects
         public bool Pawoo { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Workspace
     {
         [JsonPropertyName("pc")]
@@ -854,12 +897,14 @@ namespace PixivCS.Objects
         public Uri WorkspaceImageUrl { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class AuthResult : ResultBase
     {
         [JsonPropertyName("response")]
         public Response Response { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class Response
     {
         [JsonPropertyName("access_token")]
@@ -884,6 +929,7 @@ namespace PixivCS.Objects
         public string DeviceToken { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class ResponseUser
     {
         [JsonPropertyName("profile_image_urls")]
@@ -911,6 +957,7 @@ namespace PixivCS.Objects
         public bool IsMailAuthorized { get; set; }
     }
 
+    [Obsolete("Use PixivCS.Model")]
     public partial class ProfileImageUrls
     {
         [JsonPropertyName("px_16x16")]

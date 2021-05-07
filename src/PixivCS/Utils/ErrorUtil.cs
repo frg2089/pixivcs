@@ -2,11 +2,13 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
+using PixivCS.Model.Result;
+
 namespace PixivCS.Utils
 {
     internal static class ErrorUtil
     {
-        public static void ResultValidator(this Objects.ErrorResult error)
+        public static void ResultValidator(this ErrorResult error)
         {
             if (!error.HasError && error.Error is null)// 不存在错误
                 return;

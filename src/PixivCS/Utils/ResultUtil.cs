@@ -4,12 +4,14 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+using PixivCS.Model.Result;
+
 namespace PixivCS.Utils
 {
     public static class ResultUtil
     {
         public static async ValueTask<T> GetResult<T>(Stream stream, CancellationToken cancellationToken = default)
-            where T : Objects.ResultBase
+            where T : ResultBase
         {
             var result = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
             result.ResultValidator();
@@ -17,7 +19,7 @@ namespace PixivCS.Utils
         }
 
         internal static async ValueTask<T> GetResult<T>(this HttpResponseMessage response, CancellationToken cancellationToken = default)
-            where T : Objects.ResultBase
+            where T : ResultBase
         {
             response.HttpStatusValidator();
             using (var stream = await response.GetResponseStreamEx().ConfigureAwait(false))
